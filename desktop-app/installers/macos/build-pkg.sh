@@ -7,9 +7,11 @@ echo "🍎 Building macOS PKG Installer for CliniScribe..."
 APP_NAME="CliniScribe"
 VERSION="1.0.0"
 BUNDLE_ID="com.cliniscribe.app"
-BUILD_DIR="$(pwd)/src-tauri/target/release/bundle/macos"
-PKG_DIR="$(pwd)/installers/macos/pkg-build"
-OUTPUT_DIR="$(pwd)/installers/output/macos"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DESKTOP_APP_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+BUILD_DIR="$DESKTOP_APP_DIR/src-tauri/target/release/bundle/macos"
+PKG_DIR="$SCRIPT_DIR/pkg-build"
+OUTPUT_DIR="$DESKTOP_APP_DIR/installers/output/macos"
 
 # Colors
 GREEN='\033[0;32m'
@@ -24,7 +26,7 @@ echo ""
 
 # Step 1: Build the Tauri app first
 echo -e "${BLUE}Step 1: Building Tauri application...${NC}"
-cd "$(dirname "$0")/../.."
+cd "$DESKTOP_APP_DIR"
 npm run tauri:build
 echo -e "${GREEN}✓ Tauri build complete${NC}"
 
@@ -46,6 +48,21 @@ mkdir -p "$OUTPUT_DIR"
 cp -R "$BUILD_DIR/$APP_NAME.app" "$PKG_DIR/payload/Applications/"
 echo -e "${GREEN}✓ Copied app to PKG payload${NC}"
 
+# Step 3.5: Add bundled models (if available)
+echo -e "${BLUE}Step 3.5: Checking for bundled models...${NC}"
+if [ -d "$DESKTOP_APP_DIR/installers/bundled-models" ]; then
+    echo "  Found bundled models, including in installer..."
+    mkdir -p "$PKG_DIR/payload/Library/Application Support/CliniScribe/BundledModels"
+    cp -R "$DESKTOP_APP_DIR/installers/bundled-models/"* \
+          "$PKG_DIR/payload/Library/Application Support/CliniScribe/BundledModels/"
+
+    # Calculate bundled model size
+    MODELS_SIZE=$(du -sh "$PKG_DIR/payload/Library/Application Support/CliniScribe/BundledModels" | cut -f1)
+    echo -e "${GREEN}✓ Bundled models included ($MODELS_SIZE)${NC}"
+else
+    echo -e "${BLUE}  No bundled models found - creating standard installer${NC}"
+fi
+
 # Step 4: Create post-install script
 echo -e "${BLUE}Step 3: Creating post-install script...${NC}"
 cat > "$PKG_DIR/scripts/postinstall" << 'POSTINSTALL'
@@ -53,6 +70,8 @@ cat > "$PKG_DIR/scripts/postinstall" << 'POSTINSTALL'
 
 # Post-installation script for CliniScribe
 APP_PATH="/Applications/CliniScribe.app"
+BUNDLED_DIR="/Library/Application Support/CliniScribe/BundledModels"
+USER_HOME=$(eval echo ~$SUDO_USER)
 
 echo "Running CliniScribe post-installation..."
 
@@ -64,9 +83,43 @@ chown -R root:wheel "$APP_PATH"
 xattr -cr "$APP_PATH" 2>/dev/null || true
 
 # Create application support directory
-USER_HOME=$(eval echo ~$SUDO_USER)
 mkdir -p "$USER_HOME/Library/Application Support/com.cliniscribe.app"
 chown -R $SUDO_USER:staff "$USER_HOME/Library/Application Support/com.cliniscribe.app"
+
+# Install bundled models if available
+if [ -d "$BUNDLED_DIR" ]; then
+    echo "Installing bundled AI models..."
+
+    # Install Whisper models - copy entire HuggingFace cache structure
+    if [ -d "$BUNDLED_DIR/whisper/hub" ]; then
+        echo "  Installing Whisper models to HuggingFace cache..."
+        WHISPER_CACHE="$USER_HOME/.cache/huggingface"
+        mkdir -p "$WHISPER_CACHE"
+        cp -R "$BUNDLED_DIR/whisper/hub" "$WHISPER_CACHE/" 2>/dev/null || true
+        chown -R $SUDO_USER:staff "$WHISPER_CACHE" 2>/dev/null || true
+        echo "  ✓ Whisper models installed"
+    fi
+
+    # Install Ollama models if Ollama directory exists
+    if [ -d "$BUNDLED_DIR/ollama" ]; then
+        echo "  Installing Ollama models..."
+        OLLAMA_MODELS_DIR="$USER_HOME/.ollama/models"
+        mkdir -p "$OLLAMA_MODELS_DIR"
+        cp -R "$BUNDLED_DIR/ollama/"* "$OLLAMA_MODELS_DIR/" 2>/dev/null || true
+        chown -R $SUDO_USER:staff "$OLLAMA_MODELS_DIR"
+        echo "  ✓ Ollama models installed"
+    fi
+
+    # Create marker file to indicate bundled models were installed
+    echo '{"bundled_models_installed": true, "install_date": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"}' > \
+         "$USER_HOME/Library/Application Support/com.cliniscribe.app/.models-installed"
+    chown $SUDO_USER:staff "$USER_HOME/Library/Application Support/com.cliniscribe.app/.models-installed"
+
+    echo "✓ Bundled models installed successfully"
+    echo "  Models are ready for offline use!"
+else
+    echo "No bundled models found - models will download on first run"
+fi
 
 echo "CliniScribe installation complete!"
 echo "You can find CliniScribe in your Applications folder."
@@ -134,7 +187,45 @@ cat > "$PKG_DIR/distribution.xml" << DISTRIBUTION
 DISTRIBUTION
 
 # Step 7: Create welcome HTML
-cat > "$PKG_DIR/welcome.html" << 'WELCOME'
+if [ -d "$DESKTOP_APP_DIR/installers/bundled-models" ]; then
+    # Bundled installer version
+    MODELS_SIZE=$(du -sh "$PKG_DIR/payload/Library/Application Support/CliniScribe/BundledModels" 2>/dev/null | cut -f1 || echo "~5 GB")
+    cat > "$PKG_DIR/welcome.html" << WELCOME
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 20px; }
+        h1 { color: #2563eb; }
+        .highlight { background: linear-gradient(to right, #2563eb, #0d9488); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; }
+        .bundled-badge { background: #10b981; color: white; padding: 4px 12px; border-radius: 12px; font-size: 14px; font-weight: 600; display: inline-block; margin-left: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to <span class="highlight">CliniScribe</span> <span class="bundled-badge">BUNDLED</span></h1>
+    <p>This installer will guide you through installing CliniScribe on your Mac.</p>
+    <p><strong>CliniScribe</strong> is an AI-powered tool that transforms lecture recordings into structured study notes for medical and nursing students.</p>
+    <h3>What you'll get:</h3>
+    <ul>
+        <li>🎙️ High-quality audio transcription</li>
+        <li>📝 AI-generated study notes</li>
+        <li>🔒 100% private - everything runs locally</li>
+        <li>⚡ Fast and easy to use</li>
+        <li>📦 <strong>Pre-bundled AI models - ready for offline use!</strong></li>
+    </ul>
+    <p><strong>Installation size:</strong> $MODELS_SIZE (includes AI models)</p>
+    <p><strong>First run:</strong> ✓ No downloads needed - models are pre-installed!</p>
+    <p style="background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px; margin-top: 16px;">
+        <strong>🎉 Offline-Ready:</strong> This bundled installer includes all AI models.
+        Perfect for offline use or environments with limited internet connectivity.
+    </p>
+</body>
+</html>
+WELCOME
+else
+    # Standard installer version
+    cat > "$PKG_DIR/welcome.html" << 'WELCOME'
 <!DOCTYPE html>
 <html>
 <head>
@@ -161,6 +252,7 @@ cat > "$PKG_DIR/welcome.html" << 'WELCOME'
 </body>
 </html>
 WELCOME
+fi
 
 # Step 8: Create license
 cat > "$PKG_DIR/license.txt" << 'LICENSE'

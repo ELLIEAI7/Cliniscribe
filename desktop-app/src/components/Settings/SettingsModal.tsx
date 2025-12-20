@@ -13,6 +13,8 @@ interface AppConfig {
   auto_delete_days: number;
   theme: string;
   auto_updates: boolean;
+  recording_format: string;
+  recording_device: string;
 }
 
 interface SettingsModalProps {
@@ -233,6 +235,37 @@ function SettingsModal({ onClose }: SettingsModalProps) {
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Set to 0 to never auto-delete (manual cleanup only)
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Recording Settings */}
+          <section className="border-t border-gray-200 pt-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">🎙️ Recording Settings</h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Recording Format
+                </label>
+                <select
+                  value={config.recording_format}
+                  onChange={(e) => setConfig({ ...config, recording_format: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="wav">WAV (uncompressed, best quality)</option>
+                  <option value="mp3">MP3 (compressed, smaller files)</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  WAV: ~10MB per minute • MP3: ~1MB per minute
+                </p>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-sm text-blue-800">
+                  <strong>💡 Tip:</strong> Microphone access will be requested when you start recording.
+                  Your browser settings control which device is used.
                 </p>
               </div>
             </div>

@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi_utils.tasks import repeat_every
 from src.api.routers.pipeline import router as pipeline_router
 from src.api.routers.healthcheck import router as health_router
+from src.api.routers.transcribe_chunk import router as transcribe_router
 from src.api.services.cleanup import cleanup_old_audio
 from src.utils.settings import API_TITLE, API_VERSION, API_DESCRIPTION
 from src.utils.logger import setup_logger
@@ -27,6 +28,7 @@ app.add_middleware(
 # Include routers
 app.include_router(health_router, prefix="/api", tags=["Health"])
 app.include_router(pipeline_router, prefix="/api", tags=["Pipeline"])
+app.include_router(transcribe_router, prefix="/api", tags=["Transcription"])
 
 
 @app.on_event("startup")

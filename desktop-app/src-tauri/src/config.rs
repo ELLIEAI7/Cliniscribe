@@ -7,6 +7,7 @@ use std::path::PathBuf;
 pub struct AppConfig {
     // Setup status
     pub setup_completed: bool,
+    pub bundled_models_used: bool,
 
     // Model settings
     pub whisper_model: String,
@@ -24,12 +25,17 @@ pub struct AppConfig {
     // UI preferences
     pub theme: String,
     pub auto_updates: bool,
+
+    // Recording settings
+    pub recording_format: String,  // "wav" or "mp3"
+    pub recording_device: String,  // Device ID or empty for default
 }
 
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
             setup_completed: false,
+            bundled_models_used: false,
             whisper_model: "base".to_string(),
             ollama_model: "llama3.1:8b".to_string(),
             use_gpu: false,
@@ -39,6 +45,8 @@ impl Default for AppConfig {
             auto_delete_days: 7,
             theme: "light".to_string(),
             auto_updates: true,
+            recording_format: "wav".to_string(),
+            recording_device: String::new(),  // Empty = default device
         }
     }
 }

@@ -9,7 +9,7 @@ use tokio::sync::Mutex;
 use tauri::{Manager, State};
 use process_manager::{ProcessManager, ServiceStatus};
 use config::{AppConfig, load_config, save_config};
-use model_downloader::{download_whisper_model, download_ollama_model, DownloadProgress};
+use model_downloader::{download_whisper_model, download_ollama_model, DownloadProgress, are_bundled_models_installed};
 
 // Application state
 struct AppState {
@@ -141,6 +141,23 @@ async fn check_backend_health() -> Result<serde_json::Value, String> {
     Ok(health)
 }
 
+/// Check if bundled models were installed by the installer
+#[tauri::command]
+fn check_bundled_models() -> Result<bool, String> {
+    are_bundled_models_installed().map_err(|e| e.to_string())
+}
+
+/// Save recorded audio data to a file
+#[tauri::command]
+async fn save_recorded_audio(path: String, audio_data: Vec<u8>) -> Result<(), String> {
+    use std::fs;
+
+    fs::write(&path, audio_data)
+        .map_err(|e| format!("Failed to save recording: {}", e))?;
+
+    Ok(())
+}
+
 fn main() {
     // Load or create configuration
     let config = load_config().unwrap_or_default();
@@ -160,6 +177,8 @@ fn main() {
             get_service_status,
             download_model,
             check_backend_health,
+            check_bundled_models,
+            save_recorded_audio,
         ])
         .setup(|app| {
             // Perform any initial setup here

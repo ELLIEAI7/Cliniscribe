@@ -19,12 +19,9 @@ BUNDLE_DIR="$PROJECT_ROOT/installers/bundled-models"
 WHISPER_DIR="$BUNDLE_DIR/whisper"
 OLLAMA_DIR="$BUNDLE_DIR/ollama"
 
-# Model URLs (Hugging Face)
-WHISPER_BASE_URL="https://huggingface.co/ggerganov/whisper.cpp/resolve/main"
-
 # Models to download
-WHISPER_MODELS=("ggml-base.bin" "ggml-small.bin" "ggml-medium.bin")
-OLLAMA_MODELS=("llama3.2:3b")
+WHISPER_MODELS=("base" "small")
+OLLAMA_MODELS=("llama3.1:8b")
 
 print_header() {
     echo ""
@@ -61,38 +58,67 @@ format_bytes() {
 download_whisper_models() {
     print_section "Downloading Whisper Models"
 
-    mkdir -p "$WHISPER_DIR"
+    # Check if Python is installed
+    if ! command -v python3 >/dev/null 2>&1; then
+        echo -e "${RED}  ✗ Error: Python 3 not found${NC}"
+        echo "  Please install Python 3 to download models"
+        exit 1
+    fi
+
+    # Check if faster-whisper is installed
+    if ! python3 -c "import faster_whisper" 2>/dev/null; then
+        echo -e "${YELLOW}  Installing faster-whisper...${NC}"
+        pip3 install faster-whisper || {
+            echo -e "${RED}  ✗ Error: Failed to install faster-whisper${NC}"
+            exit 1
+        }
+    fi
+
+    # Create a temporary Python script to download models
+    cat > /tmp/download_whisper.py << 'PYEOF'
+import sys
+from faster_whisper import WhisperModel
+
+model_size = sys.argv[1]
+print(f"Downloading Whisper {model_size} model using faster-whisper...")
+try:
+    # This will download the model to the HuggingFace cache
+    model = WhisperModel(model_size, device="cpu", compute_type="int8")
+    print(f"✓ Downloaded {model_size} model successfully")
+except Exception as e:
+    print(f"✗ Failed to download {model_size} model: {e}")
+    sys.exit(1)
+PYEOF
 
     for model in "${WHISPER_MODELS[@]}"; do
-        echo -e "${BLUE}Downloading $model...${NC}"
+        echo -e "${BLUE}Downloading Whisper $model model...${NC}"
+        echo -e "${YELLOW}  (This downloads to HuggingFace cache: ~/.cache/huggingface)${NC}"
 
-        local url="$WHISPER_BASE_URL/$model"
-        local output="$WHISPER_DIR/$model"
+        python3 /tmp/download_whisper.py "$model"
 
-        if [ -f "$output" ]; then
-            echo -e "${YELLOW}  ⚠️  $model already exists, skipping${NC}"
-            continue
-        fi
-
-        # Download with progress bar
-        if command -v curl >/dev/null 2>&1; then
-            curl -L -o "$output" --progress-bar "$url"
-        elif command -v wget >/dev/null 2>&1; then
-            wget -O "$output" --show-progress "$url"
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}  ✓ Whisper $model model ready${NC}"
         else
-            echo -e "${RED}  ✗ Error: Neither curl nor wget found${NC}"
-            exit 1
-        fi
-
-        # Get file size
-        if [ -f "$output" ]; then
-            local size=$(stat -f%z "$output" 2>/dev/null || stat -c%s "$output" 2>/dev/null)
-            echo -e "${GREEN}  ✓ Downloaded $model ($(format_bytes $size))${NC}"
-        else
-            echo -e "${RED}  ✗ Failed to download $model${NC}"
+            echo -e "${RED}  ✗ Failed to download Whisper $model model${NC}"
+            rm /tmp/download_whisper.py
             exit 1
         fi
     done
+
+    # Clean up temp script
+    rm /tmp/download_whisper.py
+
+    # Copy the entire HuggingFace cache to bundle directory
+    echo -e "${BLUE}Copying models to bundle directory...${NC}"
+    mkdir -p "$WHISPER_DIR"
+
+    if [ -d "$HOME/.cache/huggingface/hub" ]; then
+        cp -R "$HOME/.cache/huggingface/hub" "$WHISPER_DIR/"
+        echo -e "${GREEN}  ✓ Models bundled successfully${NC}"
+    else
+        echo -e "${RED}  ✗ HuggingFace cache not found${NC}"
+        exit 1
+    fi
 }
 
 # Function to download Ollama models

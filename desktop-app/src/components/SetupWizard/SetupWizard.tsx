@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
 import WelcomeStep from './WelcomeStep';
@@ -14,11 +14,36 @@ type SetupStep = 'welcome' | 'download' | 'complete';
 function SetupWizard({ onComplete }: SetupWizardProps) {
   const [currentStep, setCurrentStep] = useState<SetupStep>('welcome');
   const [downloadProgress, setDownloadProgress] = useState<any>(null);
+  const [bundledModelsInstalled, setBundledModelsInstalled] = useState<boolean>(false);
+
+  // Check for bundled models on mount
+  useEffect(() => {
+    const checkBundledModels = async () => {
+      try {
+        const hasBundledModels = await invoke<boolean>('check_bundled_models');
+        setBundledModelsInstalled(hasBundledModels);
+
+        if (hasBundledModels) {
+          console.log('Bundled models detected - skipping download step');
+        }
+      } catch (err) {
+        console.error('Failed to check for bundled models:', err);
+        setBundledModelsInstalled(false);
+      }
+    };
+
+    checkBundledModels();
+  }, []);
 
   const handleNext = () => {
     if (currentStep === 'welcome') {
-      setCurrentStep('download');
-      startModelDownloads();
+      // Skip download step if bundled models are installed
+      if (bundledModelsInstalled) {
+        setCurrentStep('complete');
+      } else {
+        setCurrentStep('download');
+        startModelDownloads();
+      }
     } else if (currentStep === 'download') {
       setCurrentStep('complete');
     } else if (currentStep === 'complete') {
@@ -50,7 +75,12 @@ function SetupWizard({ onComplete }: SetupWizardProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50">
-      {currentStep === 'welcome' && <WelcomeStep onNext={handleNext} />}
+      {currentStep === 'welcome' && (
+        <WelcomeStep
+          onNext={handleNext}
+          bundledModelsInstalled={bundledModelsInstalled}
+        />
+      )}
       {currentStep === 'download' && (
         <ModelDownloadStep
           progress={downloadProgress}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import UploadCard from './UploadCard';
+import RecordCard from './RecordCard';
 import ResultsPanel from './ResultsPanel';
 import StatusBar from './StatusBar';
 import SettingsModal from '../Settings/SettingsModal';
@@ -86,13 +87,21 @@ function Dashboard({ serviceStatus, onRefreshStatus }: DashboardProps) {
           </div>
         </div>
 
-        {/* Upload Card */}
-        <UploadCard
-          onResult={handleResult}
-          onUploadStart={handleUploadStart}
-          onError={handleError}
-          isProcessing={isProcessing}
-        />
+        {/* Input Cards - Upload or Record */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <UploadCard
+            onResult={handleResult}
+            onUploadStart={handleUploadStart}
+            onError={handleError}
+            isProcessing={isProcessing}
+          />
+          <RecordCard
+            onResult={handleResult}
+            onUploadStart={handleUploadStart}
+            onError={handleError}
+            isProcessing={isProcessing}
+          />
+        </div>
 
         {/* Results Panel */}
         {data && <ResultsPanel data={data} />}
