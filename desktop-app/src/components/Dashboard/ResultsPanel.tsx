@@ -2,16 +2,20 @@ import { useState } from 'react';
 import { writeText } from '@tauri-apps/api/clipboard';
 import { save } from '@tauri-apps/api/dialog';
 import { writeTextFile } from '@tauri-apps/api/fs';
+import QuizComponent from '../Quiz/QuizComponent';
 
 interface ResultsPanelProps {
   data: any;
 }
 
+type TabType = 'notes' | 'quiz';
+
 function ResultsPanel({ data }: ResultsPanelProps) {
+  const [activeTab, setActiveTab] = useState<TabType>('notes');
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
   const [showTranscript, setShowTranscript] = useState(false);
 
-  const { transcript, summary, metadata } = data;
+  const { transcript, summary, metadata, quiz } = data;
 
   const copyToClipboard = async (text: string, section: string) => {
     try {
@@ -65,49 +69,85 @@ ${transcript.text}
   return (
     <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-gray-200 pb-4">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">Study Notes</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            {metadata.filename} • {Math.floor(metadata.duration / 60)} min {Math.floor(metadata.duration % 60)} sec
-          </p>
+      <div className="border-b border-gray-200 pb-4">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800">Your Study Materials</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              {metadata.filename} • {Math.floor(metadata.duration / 60)} min {Math.floor(metadata.duration % 60)} sec
+            </p>
+          </div>
+
+          {activeTab === 'notes' && (
+            <div className="flex gap-2">
+              <button
+                onClick={() => copyToClipboard(summary, 'notes')}
+                className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium flex items-center gap-2"
+              >
+                {copiedSection === 'notes' ? (
+                  <>
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                    </svg>
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    Copy
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={exportAsMarkdown}
+                className="px-4 py-2 bg-teal-100 text-teal-700 rounded-lg hover:bg-teal-200 transition-colors text-sm font-medium flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Export
+              </button>
+            </div>
+          )}
         </div>
 
+        {/* Tabs */}
         <div className="flex gap-2">
           <button
-            onClick={() => copyToClipboard(summary, 'notes')}
-            className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium flex items-center gap-2"
+            onClick={() => setActiveTab('notes')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === 'notes'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
           >
-            {copiedSection === 'notes' ? (
-              <>
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                </svg>
-                Copied!
-              </>
-            ) : (
-              <>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-                Copy
-              </>
-            )}
+            📝 Study Notes
           </button>
-
           <button
-            onClick={exportAsMarkdown}
-            className="px-4 py-2 bg-teal-100 text-teal-700 rounded-lg hover:bg-teal-200 transition-colors text-sm font-medium flex items-center gap-2"
+            onClick={() => setActiveTab('quiz')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+              activeTab === 'quiz'
+                ? 'bg-teal-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Export
+            🎯 Quiz
+            {quiz && quiz.length > 0 && (
+              <span className="bg-white text-teal-600 text-xs px-2 py-0.5 rounded-full font-semibold">
+                {quiz.length}
+              </span>
+            )}
           </button>
         </div>
       </div>
 
-      {/* Summary */}
+      {/* Tab Content */}
+      {activeTab === 'notes' ? (
+        <>
+          {/* Summary */}
       <div className="prose max-w-none">
         <div className="bg-gradient-to-r from-blue-50 to-teal-50 rounded-xl p-6">
           <pre className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed">
@@ -170,6 +210,11 @@ ${transcript.text}
           </div>
         )}
       </div>
+        </>
+      ) : (
+        /* Quiz Tab */
+        <QuizComponent questions={quiz || []} />
+      )}
     </div>
   );
 }

@@ -5,7 +5,7 @@ mod process_manager;
 mod config;
 mod model_downloader;
 
-use std::sync::Mutex;
+use tokio::sync::Mutex;
 use tauri::{Manager, State};
 use process_manager::{ProcessManager, ServiceStatus};
 use config::{AppConfig, load_config, save_config};
@@ -20,14 +20,14 @@ struct AppState {
 /// Check if this is the first run of the application
 #[tauri::command]
 async fn is_first_run(state: State<'_, AppState>) -> Result<bool, String> {
-    let config = state.config.lock().unwrap();
+    let config = state.config.lock().await;
     Ok(!config.setup_completed)
 }
 
 /// Mark setup as completed
 #[tauri::command]
 async fn complete_setup(state: State<'_, AppState>) -> Result<(), String> {
-    let mut config = state.config.lock().unwrap();
+    let mut config = state.config.lock().await;
     config.setup_completed = true;
     save_config(&config).map_err(|e| e.to_string())?;
     Ok(())
@@ -36,7 +36,7 @@ async fn complete_setup(state: State<'_, AppState>) -> Result<(), String> {
 /// Get current application configuration
 #[tauri::command]
 async fn get_config(state: State<'_, AppState>) -> Result<AppConfig, String> {
-    let config = state.config.lock().unwrap();
+    let config = state.config.lock().await;
     Ok(config.clone())
 }
 
@@ -46,7 +46,7 @@ async fn update_config(
     state: State<'_, AppState>,
     new_config: AppConfig
 ) -> Result<(), String> {
-    let mut config = state.config.lock().unwrap();
+    let mut config = state.config.lock().await;
     *config = new_config;
     save_config(&config).map_err(|e| e.to_string())?;
     Ok(())
@@ -58,8 +58,7 @@ async fn start_services(
     state: State<'_, AppState>,
     app_handle: tauri::AppHandle
 ) -> Result<(), String> {
-    let config = state.config.lock().unwrap().clone();
-    let mut manager = state.process_manager.lock().unwrap();
+    let config = state.config.lock().await.clone();
 
     // Get resource directory path
     let resource_dir = app_handle
@@ -67,9 +66,9 @@ async fn start_services(
         .resource_dir()
         .ok_or("Failed to get resource directory")?;
 
-    // Start services
-    manager
-        .start_all(&resource_dir, &config)
+    // Now we can hold the lock across await with tokio::sync::Mutex
+    let mut manager = state.process_manager.lock().await;
+    manager.start_all(&resource_dir, &config)
         .await
         .map_err(|e| e.to_string())?;
 
@@ -79,7 +78,7 @@ async fn start_services(
 /// Stop backend services
 #[tauri::command]
 async fn stop_services(state: State<'_, AppState>) -> Result<(), String> {
-    let mut manager = state.process_manager.lock().unwrap();
+    let mut manager = state.process_manager.lock().await;
     manager.stop_all().await.map_err(|e| e.to_string())?;
     Ok(())
 }
@@ -87,7 +86,7 @@ async fn stop_services(state: State<'_, AppState>) -> Result<(), String> {
 /// Get status of all services
 #[tauri::command]
 async fn get_service_status(state: State<'_, AppState>) -> Result<ServiceStatus, String> {
-    let manager = state.process_manager.lock().unwrap();
+    let manager = state.process_manager.lock().await;
     Ok(manager.get_status())
 }
 

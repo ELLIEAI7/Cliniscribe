@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { open } from '@tauri-apps/api/dialog';
-import { invoke } from '@tauri-apps/api/tauri';
 import LoadingSpinner from '../LoadingSpinner';
+import { generateMockQuiz } from '../../utils/mockQuizGenerator';
 
 const SUBJECTS = [
   { value: '', label: 'General' },
@@ -27,6 +27,7 @@ function UploadCard({ onResult, onUploadStart, onError, isProcessing }: UploadCa
   const [fileName, setFileName] = useState<string | null>(null);
   const [subject, setSubject] = useState('');
   const [ratio, setRatio] = useState(0.15);
+  const [quizSource, setQuizSource] = useState<'subject' | 'lecture'>('subject');
   const [error, setError] = useState('');
 
   const handleFileSelect = async () => {
@@ -61,9 +62,6 @@ function UploadCard({ onResult, onUploadStart, onError, isProcessing }: UploadCa
     setError('');
 
     try {
-      // Read file as bytes (Tauri will handle this)
-      const formData = new FormData();
-
       // For desktop, we'll use the Tauri fs API to read the file
       // and send it to the backend
       const response = await fetch('http://localhost:8080/api/pipeline?' + new URLSearchParams({
@@ -79,7 +77,36 @@ function UploadCard({ onResult, onUploadStart, onError, isProcessing }: UploadCa
       }
 
       const result = await response.json();
-      onResult(result);
+
+      // Generate quiz questions based on user's choice
+      let quizQuestions;
+      let quizMetadata;
+
+      if (quizSource === 'lecture') {
+        // Future: LLM-generated questions from lecture content
+        // For now, use subject-based questions with a note
+        quizQuestions = generateMockQuiz(subject || 'general', 5);
+        quizMetadata = {
+          source: 'lecture',
+          note: 'Content-based questions (simulated - will use actual lecture content when backend is ready)'
+        };
+      } else {
+        // Subject-based questions from question bank
+        quizQuestions = generateMockQuiz(subject || 'general', 5);
+        quizMetadata = {
+          source: 'subject',
+          note: `Questions based on ${subject || 'general'} subject knowledge`
+        };
+      }
+
+      // Add quiz to the result
+      const resultWithQuiz = {
+        ...result,
+        quiz: quizQuestions,
+        quizMetadata
+      };
+
+      onResult(resultWithQuiz);
     } catch (err: any) {
       setError(err.message || 'Failed to process audio. Please try again.');
       onError();
@@ -91,19 +118,11 @@ function UploadCard({ onResult, onUploadStart, onError, isProcessing }: UploadCa
     const { readBinaryFile } = await import('@tauri-apps/api/fs');
     const contents = await readBinaryFile(path);
 
-    const blob = new Blob([contents], { type: 'audio/mpeg' });
+    const blob = new Blob([new Uint8Array(contents)], { type: 'audio/mpeg' });
     const formData = new FormData();
     formData.append('file', blob, fileName || 'audio.mp3');
 
     return formData;
-  };
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
   };
 
   return (
@@ -178,6 +197,50 @@ function UploadCard({ onResult, onUploadStart, onError, isProcessing }: UploadCa
             ))}
           </select>
           <p className="text-xs text-gray-500 mt-1">Helps tailor the summary to your specific subject</p>
+        </div>
+
+        {/* Quiz Source Selector */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            🎯 Quiz Question Source
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setQuizSource('subject')}
+              disabled={isProcessing}
+              className={`px-4 py-3 rounded-lg border-2 transition-all text-left ${
+                quizSource === 'subject'
+                  ? 'border-blue-500 bg-blue-50 text-blue-900'
+                  : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+              } ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            >
+              <div className="font-semibold text-sm">📚 Subject-Based</div>
+              <div className="text-xs mt-1 opacity-75">
+                General {subject || 'medical'} knowledge
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setQuizSource('lecture')}
+              disabled={isProcessing}
+              className={`px-4 py-3 rounded-lg border-2 transition-all text-left ${
+                quizSource === 'lecture'
+                  ? 'border-teal-500 bg-teal-50 text-teal-900'
+                  : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+              } ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            >
+              <div className="font-semibold text-sm">🎓 Lecture Content</div>
+              <div className="text-xs mt-1 opacity-75">
+                Specific to this recording
+              </div>
+            </button>
+          </div>
+          <p className="text-xs text-gray-500 mt-2">
+            {quizSource === 'subject'
+              ? `Standardized questions testing ${subject || 'general'} knowledge`
+              : 'Questions generated from your lecture notes (coming soon)'}
+          </p>
         </div>
 
         {/* Summary Length Slider */}

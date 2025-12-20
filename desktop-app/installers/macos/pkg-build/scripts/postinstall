@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+APP_PATH="/Applications/CliniScribe.app"
+echo "Running CliniScribe post-installation..."
+chmod -R 755 "$APP_PATH"
+chown -R root:wheel "$APP_PATH"
+xattr -cr "$APP_PATH" 2>/dev/null || true
+echo "CliniScribe installation complete!"
+exit 0

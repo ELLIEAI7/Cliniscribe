@@ -1,9 +1,6 @@
 use anyhow::{Context, Result};
-use futures::StreamExt;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
-use tokio::fs::File;
-use tokio::io::AsyncWriteExt;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DownloadProgress {
@@ -17,7 +14,7 @@ pub struct DownloadProgress {
 
 /// Download Whisper model
 pub async fn download_whisper_model<F>(
-    resource_dir: &Path,
+    _resource_dir: &Path,
     progress_callback: F,
 ) -> Result<()>
 where

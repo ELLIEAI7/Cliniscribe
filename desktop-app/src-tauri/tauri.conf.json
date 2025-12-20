@@ -58,13 +58,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": [
-        "resources/**/*"
-      ],
-      "externalBin": [
-        "resources/python-backend/cliniscribe-api",
-        "resources/ollama/ollama"
-      ],
+      "resources": [],
+      "externalBin": [],
       "copyright": "Copyright © 2024 CliniScribe. Educational use.",
       "category": "Education",
       "shortDescription": "AI study notes for medical students",
@@ -86,12 +81,7 @@
       "csp": "default-src 'self'; connect-src 'self' http://localhost:8080 http://localhost:11434; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
     },
     "updater": {
-      "active": true,
-      "endpoints": [
-        "https://updates.cliniscribe.com/{{target}}/{{current_version}}"
-      ],
-      "dialog": true,
-      "pubkey": "YOUR_PUBLIC_KEY_HERE"
+      "active": false
     },
     "windows": [
       {

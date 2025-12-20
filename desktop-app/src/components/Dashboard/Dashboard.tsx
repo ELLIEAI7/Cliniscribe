@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { invoke } from '@tauri-apps/api/tauri';
 import UploadCard from './UploadCard';
 import ResultsPanel from './ResultsPanel';
 import StatusBar from './StatusBar';
