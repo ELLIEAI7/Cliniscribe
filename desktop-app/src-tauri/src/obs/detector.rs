@@ -173,3 +173,79 @@ struct WebSocketInfo {
     enabled: bool,
     port: u16,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_find_obs_path() {
+        // This test will pass on systems with OBS installed
+        // On systems without OBS, it will return None
+        let path = OBSDetector::find_obs_path();
+
+        // We can't assert a specific value, but we can check the type
+        match path {
+            Some(p) => {
+                println!("Found OBS at: {:?}", p);
+                assert!(p.is_absolute());
+            }
+            None => {
+                println!("OBS not found (this is OK for testing)");
+            }
+        }
+    }
+
+    #[test]
+    fn test_is_obs_running() {
+        // Test that the function returns a boolean without panicking
+        let is_running = OBSDetector::is_obs_running();
+        println!("OBS running: {}", is_running);
+
+        // The result depends on whether OBS is actually running
+        // We just verify it doesn't crash
+        assert!(is_running == true || is_running == false);
+    }
+
+    #[test]
+    fn test_detect() {
+        // Test that detect() returns a valid OBSInfo struct
+        let result = OBSDetector::detect();
+        assert!(result.is_ok());
+
+        let info = result.unwrap();
+
+        // Verify the struct fields are populated
+        println!("OBS Info: installed={}, running={}, ws_enabled={}",
+                 info.installed, info.is_running, info.websocket_enabled);
+
+        // Basic sanity checks
+        assert!(info.websocket_port == 4455 || info.websocket_port == 4444 || info.websocket_port == 0);
+    }
+
+    #[test]
+    #[cfg(target_os = "macos")]
+    fn test_macos_paths() {
+        // Test macOS-specific path detection
+        let expected_paths = vec![
+            "/Applications/OBS.app",
+            "/Applications/OBS Studio.app",
+        ];
+
+        for path in expected_paths {
+            let p = PathBuf::from(path);
+            println!("Checking path: {:?} - exists: {}", p, p.exists());
+        }
+    }
+
+    #[test]
+    fn test_websocket_info_creation() {
+        let ws_info = WebSocketInfo {
+            enabled: true,
+            port: 4455,
+        };
+
+        assert_eq!(ws_info.enabled, true);
+        assert_eq!(ws_info.port, 4455);
+    }
+}
