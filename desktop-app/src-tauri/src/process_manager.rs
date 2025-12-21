@@ -51,7 +51,12 @@ impl ProcessManager {
     async fn start_ollama(&mut self, resource_dir: &Path) -> Result<()> {
         println!("Starting Ollama...");
 
-        let ollama_path = resource_dir.join("ollama").join("ollama");
+        // In production builds, resources are in a nested "resources" directory
+        let ollama_path = if resource_dir.join("resources").exists() {
+            resource_dir.join("resources").join("ollama").join("ollama")
+        } else {
+            resource_dir.join("ollama").join("ollama")
+        };
 
         if !ollama_path.exists() {
             anyhow::bail!("Ollama binary not found at {:?}", ollama_path);
@@ -82,9 +87,12 @@ impl ProcessManager {
         #[cfg(not(target_os = "windows"))]
         let exe_name = "cliniscribe-api";
 
-        let api_path = resource_dir
-            .join("python-backend")
-            .join(exe_name);
+        // In production builds, resources are in a nested "resources" directory
+        let api_path = if resource_dir.join("resources").exists() {
+            resource_dir.join("resources").join("python-backend").join(exe_name)
+        } else {
+            resource_dir.join("python-backend").join(exe_name)
+        };
 
         if !api_path.exists() {
             anyhow::bail!("Python API binary not found at {:?}", api_path);

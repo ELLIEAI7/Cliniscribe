@@ -19,7 +19,6 @@ function ProUpgradeWizard({ onComplete, onCancel }: ProUpgradeWizardProps) {
   const [step, setStep] = useState<UpgradeStep>('intro');
   const [installProgress, setInstallProgress] = useState<OBSInstallProgress | null>(null);
   const [error, setError] = useState<string>('');
-  const [isPaid, setIsPaid] = useState(false); // This will integrate with payment system
 
   // Listen for OBS installation progress
   useEffect(() => {
@@ -47,7 +46,7 @@ function ProUpgradeWizard({ onComplete, onCancel }: ProUpgradeWizardProps) {
   };
 
   const handlePaymentComplete = () => {
-    setIsPaid(true);
+    // Payment verified, start installation
     startOBSInstallation();
   };
 
