@@ -82,10 +82,10 @@ impl ProcessManager {
         println!("Starting Python API...");
 
         #[cfg(target_os = "windows")]
-        let exe_name = "cliniscribe-api.exe";
+        let exe_name = "cogniscribe-api.exe";
 
         #[cfg(not(target_os = "windows"))]
-        let exe_name = "cliniscribe-api";
+        let exe_name = "cogniscribe-api";
 
         // In production builds, resources are in a nested "resources" directory
         let api_path = if resource_dir.join("resources").exists() {

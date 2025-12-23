@@ -1,8 +1,8 @@
-# CliniScribe Desktop App - Implementation Summary
+# CogniScribe Desktop App - Implementation Summary
 
 ## ✅ What We've Built
 
-You now have a complete foundation for a professional desktop application that makes Cliniscribe accessible to non-technical medical students.
+You now have a complete foundation for a professional desktop application that makes CogniScribe accessible to non-technical medical students.
 
 ### Core Components Delivered
 
@@ -164,7 +164,7 @@ export default defineConfig({
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CliniScribe</title>
+    <title>CogniScribe</title>
   </head>
   <body>
     <div id="root"></div>
@@ -264,15 +264,15 @@ npm run tauri:build
 ```
 
 **Outputs:**
-- macOS: `src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_x64.dmg`
-- Windows: `src-tauri/target/release/bundle/msi/CliniScribe_1.0.0_x64.msi`
-- Linux: `src-tauri/target/release/bundle/appimage/CliniScribe_1.0.0_amd64.AppImage`
+- macOS: `src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_x64.dmg`
+- Windows: `src-tauri/target/release/bundle/msi/CogniScribe_1.0.0_x64.msi`
+- Linux: `src-tauri/target/release/bundle/appimage/CogniScribe_1.0.0_amd64.AppImage`
 
 ### Phase 4: Distribution (1 week)
 
 #### A. Create Download Website
 Simple one-page site:
-- **cliniscribe.com/download**
+- **cogniscribe.com/download**
 - Auto-detect user's OS
 - Download buttons for all platforms
 - System requirements
@@ -281,7 +281,7 @@ Simple one-page site:
 #### B. Set Up Update Server
 For auto-updates:
 ```
-updates.cliniscribe.com/
+updates.cogniscribe.com/
 ├── darwin/
 │   └── 1.0.0.json
 ├── windows/
@@ -298,7 +298,7 @@ Each JSON contains:
   "platforms": {
     "darwin-x86_64": {
       "signature": "...",
-      "url": "https://releases.cliniscribe.com/CliniScribe_1.0.1_x64.dmg"
+      "url": "https://releases.cogniscribe.com/CogniScribe_1.0.1_x64.dmg"
     }
   }
 }
@@ -329,7 +329,7 @@ Each JSON contains:
 ### One-Time Costs
 - **Apple Developer Program**: $99/year (macOS code signing)
 - **Code Signing Certificate (Windows)**: $100-400/year
-- **Domain**: $12/year (cliniscribe.com)
+- **Domain**: $12/year (cogniscribe.com)
 
 ### Ongoing Costs (if cloud-hosted)
 - **Website Hosting**: $5-10/month (static site)

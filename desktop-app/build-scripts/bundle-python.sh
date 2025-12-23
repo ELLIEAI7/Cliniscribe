@@ -3,7 +3,7 @@ set -euo pipefail
 
 echo "🐍 Bundling Python backend with PyInstaller..."
 
-# Navigate to parent directory (Cliniscribe root)
+# Navigate to parent directory (CogniScribe root)
 cd "$(dirname "$0")/../.."
 
 # Check if Python backend exists
@@ -12,14 +12,36 @@ if [ ! -d "src/api" ]; then
     exit 1
 fi
 
+# Select Python interpreter (prefer 3.13 if available)
+if command -v python3.13 > /dev/null 2>&1; then
+    PYTHON_BIN="python3.13"
+elif command -v python3 > /dev/null 2>&1; then
+    PYTHON_BIN="python3"
+elif command -v python > /dev/null 2>&1; then
+    PYTHON_BIN="python"
+else
+    echo "❌ Error: Python 3.9+ not found in PATH"
+    exit 1
+fi
+
+echo "Using Python: $PYTHON_BIN"
+
+# Ensure Python version is supported
+"$PYTHON_BIN" - << 'PY'
+import sys
+if sys.version_info < (3, 9):
+    print("❌ Error: Python 3.9+ is required for bundling.")
+    raise SystemExit(1)
+PY
+
 # Install PyInstaller if not already installed
-if ! python3 -m pip show pyinstaller > /dev/null 2>&1; then
+if ! "$PYTHON_BIN" -m pip show pyinstaller > /dev/null 2>&1; then
     echo "Installing PyInstaller..."
-    python3 -m pip install pyinstaller
+    "$PYTHON_BIN" -m pip install pyinstaller
 fi
 
 # Create a spec file for better control
-cat > cliniscribe-api.spec << 'EOF'
+cat > cogniscribe-api.spec << 'EOF'
 # -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
@@ -70,7 +92,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='cliniscribe-api',
+    name='cogniscribe-api',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -91,16 +113,21 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='cliniscribe-api',
+    name='cogniscribe-api',
 )
 EOF
 
 # Run PyInstaller
-echo "Running PyInstaller with Python 3.13..."
-python3.13 -m PyInstaller --clean cliniscribe-api.spec
+echo "Running PyInstaller with $PYTHON_BIN..."
+"$PYTHON_BIN" -m PyInstaller --clean cogniscribe-api.spec
 
 # Check if build succeeded
-if [ ! -f "dist/cliniscribe-api/cliniscribe-api" ]; then
+EXE_PATH="dist/cogniscribe-api/cogniscribe-api"
+if [ -f "${EXE_PATH}.exe" ]; then
+    EXE_PATH="${EXE_PATH}.exe"
+fi
+
+if [ ! -f "$EXE_PATH" ]; then
     echo "❌ PyInstaller build failed"
     exit 1
 fi
@@ -111,20 +138,25 @@ mkdir -p desktop-app/src-tauri/resources/python-backend
 # Copy bundled application
 echo "Copying bundled application to desktop-app resources..."
 rm -rf desktop-app/src-tauri/resources/python-backend/*
-cp -r dist/cliniscribe-api/* desktop-app/src-tauri/resources/python-backend/
+cp -r dist/cogniscribe-api/* desktop-app/src-tauri/resources/python-backend/
 
-# Make executable
-chmod +x desktop-app/src-tauri/resources/python-backend/cliniscribe-api
+# Make executable (no-op on Windows)
+if [ -f desktop-app/src-tauri/resources/python-backend/cogniscribe-api ]; then
+    chmod +x desktop-app/src-tauri/resources/python-backend/cogniscribe-api
+fi
+if [ -f desktop-app/src-tauri/resources/python-backend/cogniscribe-api.exe ]; then
+    chmod +x desktop-app/src-tauri/resources/python-backend/cogniscribe-api.exe
+fi
 
 echo "✅ Python backend bundled successfully"
 echo "   Location: desktop-app/src-tauri/resources/python-backend/"
 echo "   Size: $(du -sh desktop-app/src-tauri/resources/python-backend/ | cut -f1)"
 
 # Cleanup
-rm -f cliniscribe-api.spec
+rm -f cogniscribe-api.spec
 rm -rf build/
 
 echo ""
 echo "Test the bundled app:"
 echo "  cd desktop-app/src-tauri/resources/python-backend"
-echo "  ./cliniscribe-api"
+echo "  ./cogniscribe-api"

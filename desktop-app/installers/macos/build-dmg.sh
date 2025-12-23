@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "🍎 Building macOS DMG for CliniScribe..."
+echo "🍎 Building macOS DMG for CogniScribe..."
 
 # Configuration
-APP_NAME="CliniScribe"
+APP_NAME="CogniScribe"
 VERSION="1.0.0"
 BUILD_DIR="$(pwd)/src-tauri/target/release/bundle/macos"
 OUTPUT_DIR="$(pwd)/installers/output/macos"

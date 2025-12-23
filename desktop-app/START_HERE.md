@@ -1,8 +1,8 @@
-# 🎉 CliniScribe Is Ready!
+# 🎉 CogniScribe Is Ready!
 
 ## ✅ Build Complete - Everything Works!
 
-Your CliniScribe desktop app is fully built with **real-time microphone recording** and **automatic setup**!
+Your CogniScribe desktop app is fully built with **real-time microphone recording** and **automatic setup**!
 
 ---
 
@@ -12,7 +12,7 @@ Your CliniScribe desktop app is fully built with **real-time microphone recordin
 
 **Location:**
 ```
-desktop-app/src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_aarch64.dmg
+desktop-app/src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_aarch64.dmg
 ```
 
 **File Size:** ~600 MB (app only - models download automatically on first run)
@@ -23,13 +23,13 @@ desktop-app/src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_aarch64.dmg
 
 ### Step 1: Install App (1 minute)
 
-1. Open `CliniScribe_1.0.0_aarch64.dmg`
-2. Drag CliniScribe to Applications
+1. Open `CogniScribe_1.0.0_aarch64.dmg`
+2. Drag CogniScribe to Applications
 3. Done!
 
 ### Step 2: First Launch (Automatic!)
 
-1. Open CliniScribe from Applications
+1. Open CogniScribe from Applications
 2. **Setup wizard appears automatically**
 3. **Models download automatically** (~5 GB, 5-15 minutes)
 4. **Everything configures itself**
@@ -160,7 +160,7 @@ desktop-app/src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_aarch64.dmg
 
 ### What's Running
 
-When CliniScribe is open, these run automatically:
+When CogniScribe is open, these run automatically:
 
 1. **Ollama** (localhost:11436) - LLM server
 2. **Python API** (localhost:8080) - Processing pipeline
@@ -208,7 +208,7 @@ Click status dropdown for details!
 ### Medical Student Lecture
 
 1. **During Lecture:**
-   - Open CliniScribe
+   - Open CogniScribe
    - Click "Start Recording"
    - Allow microphone
    - Set subject: "Anatomy"
@@ -242,9 +242,9 @@ Click status dropdown for details!
 
 ### Data Locations
 
-- **Config:** `~/Library/Application Support/cliniscribe`
+- **Config:** `~/Library/Application Support/cogniscribe`
 - **Models:** `~/.cache/huggingface` + `~/.ollama`
-- **Audio:** Configurable (default: `~/Library/Application Support/cliniscribe/audio_storage`)
+- **Audio:** Configurable (default: `~/Library/Application Support/cogniscribe/audio_storage`)
 
 ### Permissions
 
@@ -260,7 +260,7 @@ Click status dropdown for details!
 
 **Setup wizard doesn't show:**
 ```bash
-rm -rf ~/Library/Application\ Support/cliniscribe
+rm -rf ~/Library/Application\ Support/cogniscribe
 # Then relaunch app
 ```
 
@@ -270,7 +270,7 @@ rm -rf ~/Library/Application\ Support/cliniscribe
 - Disable VPN temporarily
 
 **Recording no audio:**
-- System Settings → Privacy → Microphone → Enable CliniScribe
+- System Settings → Privacy → Microphone → Enable CogniScribe
 - Test microphone in System Settings → Sound
 
 **Processing fails:**
@@ -286,7 +286,7 @@ rm -rf ~/Library/Application\ Support/cliniscribe
 
 1. **Send DMG file:**
    ```
-   CliniScribe_1.0.0_aarch64.dmg
+   CogniScribe_1.0.0_aarch64.dmg
    ```
 
 2. **They install by:**
@@ -358,7 +358,7 @@ rm -rf ~/Library/Application\ Support/cliniscribe
 
 **Your installer is ready:**
 ```
-desktop-app/src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_aarch64.dmg
+desktop-app/src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_aarch64.dmg
 ```
 
 **Just double-click and enjoy!** 🚀

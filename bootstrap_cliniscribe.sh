@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 set -euo pipefail
 
-echo "🚀 Bootstrapping CliniScribe project structure..."
+echo "🚀 Bootstrapping CogniScribe project structure..."
 
 # Directories
 mkdir -p docker
@@ -81,7 +81,7 @@ EOF
 ################################
 
 cat > src/__init__.py << 'EOF'
-# CliniScribe package
+# CogniScribe package
 EOF
 
 ################################
@@ -160,7 +160,7 @@ def generate_summary(text: str, ratio=0.15):
     max_tokens = int(len(text.split()) * ratio * 1.8)
 
     prompt = f"""
-You are CliniScribe. Generate structured clinical study notes.
+You are CogniScribe. Generate structured clinical study notes.
 
 ### Learning Objectives
 ### Core Concepts
@@ -254,7 +254,7 @@ from src.api.routers.pipeline import router as pipeline_router
 from src.api.routers.healthcheck import router as health_router
 from src.api.services.cleanup import cleanup_old_audio
 
-app = FastAPI(title="CliniScribe API")
+app = FastAPI(title="CogniScribe API")
 
 app.include_router(pipeline_router, prefix="/api")
 app.include_router(health_router, prefix="/api")
@@ -363,7 +363,7 @@ export default function App(){
   const [data,setData]=useState(null)
   return (
     <div className="max-w-4xl mx-auto p-8 space-y-6">
-      <h1 className="text-2xl font-bold mb-4">CliniScribe</h1>
+      <h1 className="text-2xl font-bold mb-4">CogniScribe</h1>
       <UploadCard onResult={setData}/>
       {data && <ResultsPanel data={data}/>}
     </div>
@@ -393,7 +393,7 @@ cat > client/web-react/index.html << 'EOF'
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>CliniScribe</title>
+    <title>CogniScribe</title>
   </head>
   <body>
     <div id="root"></div>
@@ -404,7 +404,7 @@ EOF
 
 cat > client/web-react/package.json << 'EOF'
 {
-  "name": "cliniscribe-web",
+  "name": "cogniscribe-web",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -488,9 +488,9 @@ COPY --from=build /app/dist /usr/share/nginx/html
 COPY ../docker/nginx.conf /etc/nginx/nginx.conf
 EOF
 
-echo "✅ CliniScribe structure and files created."
+echo "✅ CogniScribe structure and files created."
 echo "Next steps:"
 echo "  1) git add ."
-echo "  2) git commit -m \"Initial CliniScribe snapshot\""
+echo "  2) git commit -m \"Initial CogniScribe snapshot\""
 echo "  3) git push origin main"
 

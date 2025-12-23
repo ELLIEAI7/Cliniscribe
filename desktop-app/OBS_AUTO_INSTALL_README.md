@@ -1,8 +1,8 @@
-# OBS Auto-Install & CliniScribe Pro Implementation
+# OBS Auto-Install & CogniScribe Pro Implementation
 
 ## 🎉 What Was Built
 
-A complete automated OBS Studio installation and configuration system integrated with a Pro upgrade flow. Users can now upgrade to CliniScribe Pro with **zero manual setup** - everything is automated!
+A complete automated OBS Studio installation and configuration system integrated with a Pro upgrade flow. Users can now upgrade to CogniScribe Pro with **zero manual setup** - everything is automated!
 
 ---
 
@@ -21,7 +21,7 @@ A complete automated OBS Studio installation and configuration system integrated
 
 **2. OBS Config Writer** (`src-tauri/src/obs/config_writer.rs`)
 - ✅ Automatic WebSocket server enablement (port 4455)
-- ✅ Creates "CliniScribe" scene collection
+- ✅ Creates "CogniScribe" scene collection
 - ✅ Sets up default microphone source
 - ✅ Creates audio filter presets (Lecture Hall, Clinical Skills)
 - ✅ Configures optimal recording settings (MKV, 48kHz, stereo)
@@ -80,7 +80,7 @@ obs_get_download_url()      // Gets platform-specific download URL
 
 4. **Ready to Use**
    - OBS running in background
-   - Auto-connected to CliniScribe
+   - Auto-connected to CogniScribe
    - Pro recording mode enabled
    - Professional audio presets ready
 
@@ -154,7 +154,7 @@ SampleRate=48000
 ChannelSetup=Stereo
 ```
 
-**Scene Collection** (`basic/scenes/CliniScribe.json`):
+**Scene Collection** (`basic/scenes/CogniScribe.json`):
 - Creates "Lecture Recording" scene
 - Adds default microphone source
 - Pre-configures audio routing
@@ -166,7 +166,7 @@ ChannelSetup=Stereo
 ### Quick Start (Paddle - Recommended):
 
 1. **Sign up:** https://paddle.com
-2. **Create Product:** "CliniScribe Pro - Monthly"
+2. **Create Product:** "CogniScribe Pro - Monthly"
 3. **Get Keys:** Client-side token from dashboard
 4. **Update Code:**
 
@@ -182,7 +182,7 @@ const paddle = await initializePaddle({
 // In handleStartUpgrade()
 paddle.Checkout.open({
   items: [{
-    priceId: 'pri_cliniscribe_pro_monthly',
+    priceId: 'pri_cogniscribe_pro_monthly',
     quantity: 1
   }],
   customData: {
@@ -245,7 +245,7 @@ npm run tauri dev
 4. ✅ Installs OBS (requires admin password on macOS)
 5. ✅ Configures settings
 6. ✅ Launches OBS
-7. ✅ Auto-connects to CliniScribe
+7. ✅ Auto-connects to CogniScribe
 8. ✅ Shows success screen
 
 ### Manual Testing Checklist:
@@ -413,7 +413,7 @@ async fn track_event(event: String, data: serde_json::Value) {
 
 ## 🚀 Ready to Launch!
 
-The automated OBS installation system is complete and working! Follow the payment integration guide to add billing, test the full flow, and you're ready to launch CliniScribe Pro!
+The automated OBS installation system is complete and working! Follow the payment integration guide to add billing, test the full flow, and you're ready to launch CogniScribe Pro!
 
 **Questions?** Check `PAYMENT_INTEGRATION_GUIDE.md` for detailed payment setup instructions.
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "🔁 Filling CliniScribe files with canonical code..."
+echo "🔁 Filling CogniScribe files with canonical code..."
 
 ################################
 # PYTHON BACKEND
@@ -75,7 +75,7 @@ def generate_summary(text: str, ratio=0.15):
     max_tokens = int(len(text.split()) * ratio * 1.8)
 
     prompt = f"""
-You are CliniScribe. Generate structured clinical study notes.
+You are CogniScribe. Generate structured clinical study notes.
 
 ### Learning Objectives
 ### Core Concepts
@@ -146,7 +146,7 @@ from fastapi_utils.tasks import repeat_every
 from src.api.routers.pipeline import router
 from src.api.services.cleanup import cleanup_old_audio
 
-app = FastAPI(title="CliniScribe API")
+app = FastAPI(title="CogniScribe API")
 
 app.include_router(router, prefix="/api")
 
@@ -232,5 +232,5 @@ echo "✅ All conversation snippets written into their files."
 echo "Next:"
 echo "  git status"
 echo "  git add ."
-echo "  git commit -m \"CliniScribe canonical snapshot from conversation\""
+echo "  git commit -m \"CogniScribe canonical snapshot from conversation\""
 echo "  git push origin main"

@@ -21,7 +21,7 @@ function CompletionStep({ onNext }: CompletionStepProps) {
           </h2>
 
           <p className="text-xl text-gray-600 mb-8">
-            CliniScribe is ready to transform your lecture recordings into study notes.
+            CogniScribe is ready to transform your lecture recordings into study notes.
           </p>
 
           {/* Quick Start Guide */}
@@ -78,7 +78,7 @@ function CompletionStep({ onNext }: CompletionStepProps) {
             onClick={onNext}
             className="bg-gradient-to-r from-blue-600 to-teal-600 text-white font-semibold py-4 px-16 rounded-xl hover:from-blue-700 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-lg mb-4"
           >
-            Launch CliniScribe
+            Launch CogniScribe
           </button>
 
           <p className="text-sm text-gray-500">

@@ -1,4 +1,4 @@
-# CliniScribe - Quick Installation Guide 🚀
+# CogniScribe - Quick Installation Guide 🚀
 
 ## Super Easy Installation (Recommended)
 
@@ -7,14 +7,14 @@
 **One-click install with everything included** - No configuration needed!
 
 1. **Download** the bundled installer:
-   - File: `CliniScribe-1.0.0-Bundled-Installer.pkg` (~5.4 GB)
+   - File: `CogniScribe-1.0.0-Bundled-Installer.pkg` (~5.4 GB)
    - Includes app + all AI models pre-installed
 
 2. **Double-click** the PKG file
 
 3. **Follow** the installation wizard
 
-4. **Launch** CliniScribe from your Applications folder
+4. **Launch** CogniScribe from your Applications folder
 
 5. **Done!** No setup needed - everything works immediately ✅
 
@@ -31,11 +31,11 @@
 **Smaller initial download, models download on first run**
 
 1. **Download** the standard installer:
-   - File: `CliniScribe-1.0.0-Installer.pkg` (~600 MB)
+   - File: `CogniScribe-1.0.0-Installer.pkg` (~600 MB)
 
 2. **Double-click** the PKG file
 
-3. **Launch** CliniScribe from Applications
+3. **Launch** CogniScribe from Applications
 
 4. **Setup wizard** appears:
    - Click "Get Started"
@@ -55,13 +55,13 @@
 
 **Drag-and-drop installation**
 
-1. **Download**: `CliniScribe_1.0.0_aarch64.dmg`
+1. **Download**: `CogniScribe_1.0.0_aarch64.dmg`
 
 2. **Open** the DMG file
 
-3. **Drag** CliniScribe.app to Applications folder
+3. **Drag** CogniScribe.app to Applications folder
 
-4. **Launch** CliniScribe
+4. **Launch** CogniScribe
 
 5. **First run**: Setup wizard downloads models (one-time, ~5 GB)
 
@@ -85,7 +85,7 @@
 - ✅ One-time setup
 - ✅ Ready to use!
 
-### Using CliniScribe
+### Using CogniScribe
 
 1. **Upload or Record**:
    - Upload audio file (MP3, WAV, M4A, etc.)
@@ -121,15 +121,15 @@
 
 ### Installation Issues
 
-**"CliniScribe cannot be opened because it is from an unidentified developer"**
-1. Right-click CliniScribe.app
+**"CogniScribe cannot be opened because it is from an unidentified developer"**
+1. Right-click CogniScribe.app
 2. Click "Open"
 3. Click "Open" in the dialog
 4. Or: System Settings → Privacy & Security → Allow anyway
 
 **"Permission denied" error**
 1. Open Terminal
-2. Run: `chmod +x /Applications/CliniScribe.app/Contents/MacOS/CliniScribe`
+2. Run: `chmod +x /Applications/CogniScribe.app/Contents/MacOS/CogniScribe`
 3. Try launching again
 
 ### First Run Issues
@@ -141,20 +141,20 @@
 - Try the bundled installer instead
 
 **Setup wizard stuck**
-- Quit CliniScribe
-- Delete: `~/Library/Application Support/cliniscribe`
-- Restart CliniScribe
+- Quit CogniScribe
+- Delete: `~/Library/Application Support/cogniscribe`
+- Restart CogniScribe
 
 **Processing fails**
 - Check Services status (green dots in header)
-- If red: Quit and restart CliniScribe
+- If red: Quit and restart CogniScribe
 - Models may still be loading (wait 1-2 minutes)
 
 ### Recording Issues
 
 **Microphone access denied**
 - System Settings → Privacy & Security → Microphone
-- Enable CliniScribe
+- Enable CogniScribe
 
 **No audio captured**
 - Check microphone is selected in browser
@@ -198,7 +198,7 @@
 
 1. **Clone repository**:
    ```bash
-   git clone https://github.com/cliniscribe/desktop-app.git
+   git clone https://github.com/cogniscribe/desktop-app.git
    cd desktop-app
    ```
 
@@ -231,10 +231,10 @@
 
 ## Uninstallation
 
-To remove CliniScribe:
+To remove CogniScribe:
 
-1. **Delete app**: Move CliniScribe.app to Trash
-2. **Delete data**: `~/Library/Application Support/cliniscribe`
+1. **Delete app**: Move CogniScribe.app to Trash
+2. **Delete data**: `~/Library/Application Support/cogniscribe`
 3. **Delete cache**: `~/.cache/huggingface` (Whisper models)
 4. **Delete Ollama**: `~/.ollama` (if not using Ollama elsewhere)
 
@@ -252,4 +252,4 @@ After installation, try:
 
 ---
 
-**Enjoy studying smarter with CliniScribe! 🎓💙**
+**Enjoy studying smarter with CogniScribe! 🎓💙**

@@ -24,7 +24,7 @@ function WelcomeStep({ onNext, bundledModelsInstalled = false }: WelcomeStepProp
             Welcome! 🎓
           </h2>
           <p className="text-lg text-gray-600 mb-6">
-            CliniScribe transforms your lecture recordings into structured study notes using state-of-the-art AI.
+            CogniScribe transforms your lecture recordings into structured study notes using state-of-the-art AI.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
@@ -65,7 +65,7 @@ function WelcomeStep({ onNext, bundledModelsInstalled = false }: WelcomeStepProp
                 Models Pre-Installed!
               </h3>
               <p className="text-gray-600 mb-4">
-                Great news! AI models are already installed on your system. You're ready to use CliniScribe offline.
+                Great news! AI models are already installed on your system. You're ready to use CogniScribe offline.
               </p>
               <div className="flex flex-col gap-2 text-left">
                 <div className="flex items-center gap-3">
@@ -123,7 +123,7 @@ function WelcomeStep({ onNext, bundledModelsInstalled = false }: WelcomeStepProp
         </button>
 
         <p className="text-sm text-gray-500 mt-4">
-          Setup takes about 10 minutes • You can use CliniScribe offline after setup
+          Setup takes about 10 minutes • You can use CogniScribe offline after setup
         </p>
       </div>
     </div>

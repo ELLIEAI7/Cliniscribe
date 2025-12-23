@@ -1,4 +1,4 @@
-# CliniScribe User Guide
+# CogniScribe User Guide
 
 **For Medical & Nursing Students - No Technical Knowledge Required!**
 
@@ -18,9 +18,9 @@
 ### Windows
 
 1. **Download** the installer
-   - Visit: https://cliniscribe.com/download
+   - Visit: https://cogniscribe.com/download
    - Click "Download for Windows"
-   - File: `CliniScribe-Setup.msi` (~650 MB)
+   - File: `CogniScribe-Setup.msi` (~650 MB)
 
 2. **Install**
    - Double-click the downloaded file
@@ -33,68 +33,68 @@
    - Click "Finish"
 
 3. **Launch**
-   - Find "CliniScribe" in your Start Menu
+   - Find "CogniScribe" in your Start Menu
    - Or double-click the desktop shortcut
 
 ### macOS
 
 1. **Download** the installer
-   - Visit: https://cliniscribe.com/download
+   - Visit: https://cogniscribe.com/download
    - Click "Download for Mac"
-   - File: `CliniScribe.dmg` (~600 MB)
+   - File: `CogniScribe.dmg` (~600 MB)
 
 2. **Install**
    - Double-click the downloaded `.dmg` file
-   - Drag the CliniScribe icon to your Applications folder
+   - Drag the CogniScribe icon to your Applications folder
    - Eject the DMG (right-click → Eject)
 
 3. **Launch**
    - Open Applications folder
-   - Find CliniScribe
+   - Find CogniScribe
    - Right-click → Open (first time only, to bypass Gatekeeper)
    - Click "Open" when warned about unidentified developer
 
 ### Linux
 
 1. **Download** the installer
-   - Visit: https://cliniscribe.com/download
+   - Visit: https://cogniscribe.com/download
    - Click "Download for Linux"
-   - File: `CliniScribe.AppImage` (~600 MB)
+   - File: `CogniScribe.AppImage` (~600 MB)
 
 2. **Install**
    ```bash
    # Make executable
-   chmod +x CliniScribe.AppImage
+   chmod +x CogniScribe.AppImage
 
    # Optional: Move to /usr/local/bin for easy access
-   sudo mv CliniScribe.AppImage /usr/local/bin/cliniscribe
+   sudo mv CogniScribe.AppImage /usr/local/bin/cogniscribe
    ```
 
 3. **Launch**
    ```bash
-   ./CliniScribe.AppImage
+   ./CogniScribe.AppImage
    # or if you moved it:
-   cliniscribe
+   cogniscribe
    ```
 
 ---
 
 ## First-Time Setup
 
-The first time you open CliniScribe, you'll see a setup wizard. This only happens once!
+The first time you open CogniScribe, you'll see a setup wizard. This only happens once!
 
 ### Step 1: Welcome Screen
 
 You'll see:
 - Welcome message
-- What CliniScribe does
+- What CogniScribe does
 - Info about the AI models we'll download
 
 **Click "Get Started"**
 
 ### Step 2: Download AI Models
 
-CliniScribe will automatically download two AI models:
+CogniScribe will automatically download two AI models:
 
 1. **Whisper** (~150 MB) - For transcribing audio to text
 2. **Llama 3.1** (~4.7 GB) - For creating study notes
@@ -109,16 +109,16 @@ CliniScribe will automatically download two AI models:
 - **Medium internet** (50 Mbps): 10-15 minutes
 - **Slow internet** (10 Mbps): 20-30 minutes
 
-**💡 Tip:** You can minimize CliniScribe and do other things. We'll notify you when it's done!
+**💡 Tip:** You can minimize CogniScribe and do other things. We'll notify you when it's done!
 
 ### Step 3: All Set!
 
 Once downloads finish, you'll see:
 - Success message 🎉
 - Quick start guide
-- "Launch CliniScribe" button
+- "Launch CogniScribe" button
 
-**Click "Launch CliniScribe"**
+**Click "Launch CogniScribe"**
 
 ---
 
@@ -137,9 +137,9 @@ Once downloads finish, you'll see:
 - M4A (iPhone default)
 - FLAC, OGG, AAC, WMA
 
-### Step 2: Upload to CliniScribe
+### Step 2: Upload to CogniScribe
 
-1. **Open CliniScribe** (if not already open)
+1. **Open CogniScribe** (if not already open)
 
 2. **Upload your recording:**
    - Click the upload area
@@ -179,7 +179,7 @@ Once downloads finish, you'll see:
 - "Processing your lecture..." message
 - Bouncing dots animation
 
-**💡 Tip:** You can minimize CliniScribe and study other material while it processes!
+**💡 Tip:** You can minimize CogniScribe and study other material while it processes!
 
 ### Step 4: Get Your Study Notes
 
@@ -284,9 +284,9 @@ YYYY-MM-DD_Subject_Topic.md
 **Problem**: Backend isn't running
 
 **Solutions:**
-1. Restart CliniScribe
+1. Restart CogniScribe
 2. Check if another instance is running (close it)
-3. On Mac: System Preferences → Security → Allow CliniScribe
+3. On Mac: System Preferences → Security → Allow CogniScribe
 4. On Windows: Windows Defender may have blocked it - allow it
 
 ### Processing is very slow
@@ -321,7 +321,7 @@ YYYY-MM-DD_Subject_Topic.md
 
 ### Out of disk space
 
-**CliniScribe uses:**
+**CogniScribe uses:**
 - ~5 GB for AI models (one-time)
 - ~100-200 MB per hour of audio (temporary)
 - Auto-deletes audio after 7 days (configurable)
@@ -333,10 +333,10 @@ YYYY-MM-DD_Subject_Topic.md
 
 ### Update available but won't install
 
-1. Close CliniScribe completely
+1. Close CogniScribe completely
 2. Download new installer from website
 3. Install over existing version
-4. Reopen CliniScribe
+4. Reopen CogniScribe
 
 ---
 
@@ -351,7 +351,7 @@ YYYY-MM-DD_Subject_Topic.md
 ### What goes to the internet:
 - ❌ Nothing! (except updates check)
 
-CliniScribe works **100% offline** after setup. Your lecture recordings and study materials never leave your computer.
+CogniScribe works **100% offline** after setup. Your lecture recordings and study materials never leave your computer.
 
 ---
 
@@ -362,16 +362,16 @@ CliniScribe works **100% offline** after setup. Your lecture recordings and stud
 - Access tutorials and FAQs
 
 ### Email Support
-- support@cliniscribe.com
+- support@cogniscribe.com
 - We usually respond within 24 hours
 
 ### Community
-- Discord: https://discord.gg/cliniscribe
-- Reddit: r/CliniScribe
+- Discord: https://discord.gg/cogniscribe
+- Reddit: r/CogniScribe
 - Share tips with fellow students!
 
 ### Report a Bug
-- GitHub Issues: https://github.com/yourusername/Cliniscribe/issues
+- GitHub Issues: https://github.com/yourusername/CogniScribe/issues
 - Include:
   - What you were doing
   - What happened vs. what you expected
@@ -383,29 +383,29 @@ CliniScribe works **100% offline** after setup. Your lecture recordings and stud
 
 ### Windows
 1. Settings → Apps → Apps & features
-2. Find "CliniScribe"
+2. Find "CogniScribe"
 3. Click → Uninstall
 
 ### macOS
 1. Open Applications folder
-2. Drag CliniScribe to Trash
+2. Drag CogniScribe to Trash
 3. Empty Trash
 
 ### Linux
 ```bash
-rm /usr/local/bin/cliniscribe  # or wherever you put it
+rm /usr/local/bin/cogniscribe  # or wherever you put it
 ```
 
 **Data cleanup:**
-- Windows: Delete `%APPDATA%\CliniScribe`
-- macOS: Delete `~/Library/Application Support/com.cliniscribe.app`
-- Linux: Delete `~/.config/cliniscribe`
+- Windows: Delete `%APPDATA%\CogniScribe`
+- macOS: Delete `~/Library/Application Support/com.bageltech.cogniscribe`
+- Linux: Delete `~/.config/cogniscribe`
 
 ---
 
 ## Frequently Asked Questions
 
-**Q: Do I need internet to use CliniScribe?**
+**Q: Do I need internet to use CogniScribe?**
 A: Only for the first-time setup (downloading models). After that, it works 100% offline!
 
 **Q: Can I use this for languages other than English?**
@@ -418,7 +418,7 @@ A: Typically 90-95% accurate with clear audio. Medical terminology may need revi
 A: Yes! Copy them to your preferred note-taking app and edit freely.
 
 **Q: Is this free?**
-A: Yes! CliniScribe is free for educational use.
+A: Yes! CogniScribe is free for educational use.
 
 **Q: Can professors tell I used AI for notes?**
 A: These are YOUR notes from YOUR recordings. Using AI to organize your study materials is like using a calculator for math - it's a tool to help you learn.

@@ -1,6 +1,6 @@
-# CliniScribe Desktop Application
+# CogniScribe Desktop Application
 
-A cross-platform desktop app that makes CliniScribe dead-simple for medical students. No Python, no Ollama, no terminal commands - just download, install, and use.
+A cross-platform desktop app that makes CogniScribe dead-simple for medical students. No Python, no Ollama, no terminal commands - just download, install, and use.
 
 ## Features
 
@@ -123,7 +123,7 @@ desktop-app/
 │   │
 │   ├── resources/               # Bundled at build time
 │   │   ├── python-backend/      # PyInstaller bundle
-│   │   │   ├── cliniscribe-api  # Executable
+│   │   │   ├── cogniscribe-api  # Executable
 │   │   │   └── _internal/       # Dependencies
 │   │   └── ollama/              # Ollama binary
 │   │
@@ -190,9 +190,9 @@ const health = await invoke<any>('check_backend_health');
 
 The app stores configuration in platform-specific locations:
 
-- **macOS**: `~/Library/Application Support/com.cliniscribe.app/config.json`
-- **Windows**: `%APPDATA%\CliniScribe\config.json`
-- **Linux**: `~/.config/cliniscribe/config.json`
+- **macOS**: `~/Library/Application Support/com.bageltech.cogniscribe/config.json`
+- **Windows**: `%APPDATA%\CogniScribe\config.json`
+- **Linux**: `~/.config/cogniscribe/config.json`
 
 ### Config Schema
 ```json
@@ -231,7 +231,7 @@ In `tauri.conf.json`, set:
 ### Test Backend Separately
 ```bash
 cd src-tauri/resources/python-backend
-./cliniscribe-api
+./cogniscribe-api
 ```
 
 Then visit http://localhost:8080/docs
@@ -253,25 +253,25 @@ Then test: http://localhost:11436/api/tags
 
 # Sign the app
 codesign --force --deep --sign "Developer ID Application: Your Name" \
-  src-tauri/target/release/bundle/macos/CliniScribe.app
+  src-tauri/target/release/bundle/macos/CogniScribe.app
 
 # Notarize (submit to Apple)
 xcrun notarytool submit \
-  src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_x64.dmg \
+  src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_x64.dmg \
   --apple-id "your-email@example.com" \
   --password "app-specific-password" \
   --team-id "TEAM_ID" \
   --wait
 
 # Staple the notarization ticket
-xcrun stapler staple src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_x64.dmg
+xcrun stapler staple src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_x64.dmg
 ```
 
 ### Windows
 ```bash
 # Use SignTool (requires code signing certificate)
 signtool sign /f certificate.pfx /p password /t http://timestamp.digicert.com \
-  src-tauri/target/release/bundle/msi/CliniScribe_1.0.0_x64.msi
+  src-tauri/target/release/bundle/msi/CogniScribe_1.0.0_x64.msi
 ```
 
 ## Auto-Updates
@@ -283,7 +283,7 @@ Tauri includes built-in update support. Configure the update server in `tauri.co
   "updater": {
     "active": true,
     "endpoints": [
-      "https://updates.cliniscribe.com/{{target}}/{{current_version}}"
+      "https://updates.cogniscribe.com/{{target}}/{{current_version}}"
     ],
     "dialog": true,
     "pubkey": "YOUR_PUBLIC_KEY_HERE"
@@ -293,11 +293,11 @@ Tauri includes built-in update support. Configure the update server in `tauri.co
 
 ### Generate Update Keys
 ```bash
-tauri signer generate -w ~/.tauri/cliniscribe.key
+tauri signer generate -w ~/.tauri/cogniscribe.key
 ```
 
 This creates:
-- Private key: `~/.tauri/cliniscribe.key` (keep secret!)
+- Private key: `~/.tauri/cogniscribe.key` (keep secret!)
 - Public key: Add to `tauri.conf.json`
 
 ### Publish Updates
@@ -333,7 +333,7 @@ cargo install tauri-cli --force
 2. Verify binaries exist in `src-tauri/resources/`
 3. Ensure executables have correct permissions:
    ```bash
-   chmod +x src-tauri/resources/python-backend/cliniscribe-api
+   chmod +x src-tauri/resources/python-backend/cogniscribe-api
    chmod +x src-tauri/resources/ollama/ollama
    ```
 
@@ -376,7 +376,7 @@ Educational use for medical and nursing students.
 
 ## Support
 
-- **Issues**: https://github.com/yourusername/Cliniscribe/issues
+- **Issues**: https://github.com/yourusername/CogniScribe/issues
 - **Docs**: See ARCHITECTURE.md for detailed design
 - **Discord**: Coming soon
 

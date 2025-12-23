@@ -1,6 +1,6 @@
-# CliniScribe Web UI
+# CogniScribe Web UI
 
-A beautiful, modern React frontend for CliniScribe - the AI-powered study assistant for medical and nursing students.
+A beautiful, modern React frontend for CogniScribe - the AI-powered study assistant for medical and nursing students.
 
 ## Features
 
@@ -25,7 +25,7 @@ A beautiful, modern React frontend for CliniScribe - the AI-powered study assist
 ### Prerequisites
 
 - Node.js 16+ and npm/yarn
-- CliniScribe backend running on http://localhost:8080
+- CogniScribe backend running on http://localhost:8080
 
 ### Installation
 
@@ -79,7 +79,7 @@ VITE_API_URL=http://localhost:8080
 client/web-react/
 ├── src/
 │   ├── api/
-│   │   └── cliniscribe.js      # API client
+│   │   └── cogniscribe.js      # API client
 │   ├── components/
 │   │   ├── Header.jsx          # App header with branding
 │   │   ├── Footer.jsx          # App footer
@@ -102,7 +102,7 @@ client/web-react/
 Main application component that manages state and orchestrates the upload/results flow.
 
 ### Header.jsx
-Branded navigation header with CliniScribe logo and menu items.
+Branded navigation header with CogniScribe logo and menu items.
 
 ### Footer.jsx
 App footer with links and legal information.
@@ -159,10 +159,10 @@ Build and run with Docker:
 
 ```bash
 # Build the image
-docker build -t cliniscribe-ui .
+docker build -t cogniscribe-ui .
 
 # Run the container
-docker run -p 5173:5173 cliniscribe-ui
+docker run -p 5173:5173 cogniscribe-ui
 ```
 
 Or use with docker-compose (from project root):
@@ -193,7 +193,7 @@ Install the Tailwind CSS IntelliSense VS Code extension for autocomplete.
 Use the browser console to test API calls:
 
 ```javascript
-import { uploadAudio } from './api/cliniscribe'
+import { uploadAudio } from './api/cogniscribe'
 
 // Test with a file
 const file = document.querySelector('input[type="file"]').files[0]

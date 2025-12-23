@@ -1,6 +1,6 @@
 # Homebrew Distribution Guide
 
-This guide explains how to distribute CliniScribe via Homebrew, the package manager for macOS.
+This guide explains how to distribute CogniScribe via Homebrew, the package manager for macOS.
 
 ## 📋 Table of Contents
 
@@ -16,15 +16,15 @@ This guide explains how to distribute CliniScribe via Homebrew, the package mana
 Homebrew Casks provide a simple way to install GUI applications on macOS:
 
 ```bash
-brew install --cask cliniscribe
+brew install --cask cogniscribe
 ```
 
 This is ideal for developers and power users who prefer command-line installation.
 
 **User Experience:**
 - ✅ Simple one-line installation
-- ✅ Easy updates: `brew upgrade cliniscribe`
-- ✅ Clean uninstall: `brew uninstall --cask cliniscribe`
+- ✅ Easy updates: `brew upgrade cogniscribe`
+- ✅ Clean uninstall: `brew uninstall --cask cogniscribe`
 - ✅ Automatic dependency management
 - ✅ Version tracking and rollback support
 
@@ -42,8 +42,8 @@ Create your own Homebrew tap repository. This gives you full control and is easi
 
 **How users install:**
 ```bash
-brew tap YOUR_USERNAME/cliniscribe
-brew install --cask cliniscribe
+brew tap YOUR_USERNAME/cogniscribe
+brew install --cask cogniscribe
 ```
 
 ### Option 2: Official Homebrew Cask Repository
@@ -58,7 +58,7 @@ Submit to the official `homebrew/cask` repository for wider distribution.
 
 **How users install:**
 ```bash
-brew install --cask cliniscribe
+brew install --cask cogniscribe
 ```
 
 **Requirements:**
@@ -71,12 +71,12 @@ brew install --cask cliniscribe
 
 ### Step 1: Create a GitHub Repository
 
-Create a new repository named `homebrew-cliniscribe`:
+Create a new repository named `homebrew-cogniscribe`:
 
 ```bash
 # Create the repo on GitHub, then:
-mkdir homebrew-cliniscribe
-cd homebrew-cliniscribe
+mkdir homebrew-cogniscribe
+cd homebrew-cogniscribe
 git init
 ```
 
@@ -84,21 +84,21 @@ git init
 
 ```bash
 mkdir -p Casks
-cp /path/to/cliniscribe.rb Casks/cliniscribe.rb
+cp /path/to/cogniscribe.rb Casks/cogniscribe.rb
 ```
 
 ### Step 3: Update the Formula
 
-Edit `Casks/cliniscribe.rb` and update:
+Edit `Casks/cogniscribe.rb` and update:
 
 1. **URL**: Point to your GitHub release:
    ```ruby
-   url "https://github.com/YOUR_USERNAME/cliniscribe/releases/download/v#{version}/CliniScribe-#{version}.dmg"
+   url "https://github.com/YOUR_USERNAME/cogniscribe/releases/download/v#{version}/CogniScribe-#{version}.dmg"
    ```
 
 2. **SHA256**: Generate after building the DMG:
    ```bash
-   shasum -a 256 CliniScribe-1.0.0.dmg
+   shasum -a 256 CogniScribe-1.0.0.dmg
    ```
 
    Then update:
@@ -109,16 +109,16 @@ Edit `Casks/cliniscribe.rb` and update:
 ### Step 4: Push to GitHub
 
 ```bash
-git add Casks/cliniscribe.rb
-git commit -m "Add CliniScribe cask formula"
+git add Casks/cogniscribe.rb
+git commit -m "Add CogniScribe cask formula"
 git push origin main
 ```
 
 ### Step 5: Users Can Now Install
 
 ```bash
-brew tap YOUR_USERNAME/cliniscribe
-brew install --cask cliniscribe
+brew tap YOUR_USERNAME/cogniscribe
+brew install --cask cogniscribe
 ```
 
 ## 🎓 Getting into Official Homebrew
@@ -135,7 +135,7 @@ brew install --cask cliniscribe
 
 1. **Test Your Formula Locally**:
    ```bash
-   brew install --cask --debug --verbose ./cliniscribe.rb
+   brew install --cask --debug --verbose ./cogniscribe.rb
    ```
 
 2. **Fork the Repository**:
@@ -147,22 +147,22 @@ brew install --cask cliniscribe
    ```bash
    git clone https://github.com/YOUR_USERNAME/homebrew-cask
    cd homebrew-cask
-   git checkout -b cliniscribe
+   git checkout -b cogniscribe
 
-   cp /path/to/cliniscribe.rb Casks/c/cliniscribe.rb
+   cp /path/to/cogniscribe.rb Casks/c/cogniscribe.rb
    ```
 
 4. **Test with Brew Audit**:
    ```bash
-   brew audit --cask --new-cask cliniscribe
-   brew style --fix cliniscribe
+   brew audit --cask --new-cask cogniscribe
+   brew style --fix cogniscribe
    ```
 
 5. **Create Pull Request**:
    ```bash
-   git add Casks/c/cliniscribe.rb
-   git commit -m "Add CliniScribe 1.0.0"
-   git push origin cliniscribe
+   git add Casks/c/cogniscribe.rb
+   git commit -m "Add CogniScribe 1.0.0"
+   git push origin cogniscribe
    ```
 
    Then create a PR on GitHub.
@@ -192,19 +192,19 @@ Test your formula before distribution:
 
 ```bash
 # Test installation
-brew install --cask --debug --verbose cliniscribe.rb
+brew install --cask --debug --verbose cogniscribe.rb
 
 # Verify it works
-open /Applications/CliniScribe.app
+open /Applications/CogniScribe.app
 
 # Test uninstall
-brew uninstall --cask cliniscribe
+brew uninstall --cask cogniscribe
 
 # Test audit
-brew audit --cask cliniscribe
+brew audit --cask cogniscribe
 
 # Test style
-brew style --fix cliniscribe
+brew style --fix cogniscribe
 ```
 
 ### Common Issues
@@ -212,21 +212,21 @@ brew style --fix cliniscribe
 **Issue: SHA256 mismatch**
 ```bash
 # Regenerate the hash
-shasum -a 256 CliniScribe-1.0.0.dmg
+shasum -a 256 CogniScribe-1.0.0.dmg
 # Update in formula
 ```
 
 **Issue: App not signed**
 ```bash
 # Check signing
-codesign -dvv /Applications/CliniScribe.app
+codesign -dvv /Applications/CogniScribe.app
 # Should show Developer ID
 ```
 
 **Issue: Gatekeeper blocks app**
 ```bash
 # Check notarization
-spctl -a -vv /Applications/CliniScribe.app
+spctl -a -vv /Applications/CogniScribe.app
 # Should show "accepted"
 ```
 
@@ -238,7 +238,7 @@ When you release a new version:
 
 1. Build the new DMG
 2. Generate new SHA256
-3. Update `cliniscribe.rb`:
+3. Update `cogniscribe.rb`:
    ```ruby
    version "1.1.0"
    sha256 "new_hash_here"
@@ -248,15 +248,15 @@ When you release a new version:
 Users update with:
 ```bash
 brew update
-brew upgrade --cask cliniscribe
+brew upgrade --cask cogniscribe
 ```
 
 ### For Official Homebrew
 
 1. Fork and clone `homebrew-cask` again
-2. Create a new branch: `cliniscribe-1.1.0`
-3. Update `Casks/c/cliniscribe.rb` with new version and SHA256
-4. Create PR with title: "cliniscribe 1.1.0"
+2. Create a new branch: `cogniscribe-1.1.0`
+3. Update `Casks/c/cogniscribe.rb` with new version and SHA256
+4. Create PR with title: "cogniscribe 1.1.0"
 5. Wait for review and merge
 
 ## 📊 Analytics
@@ -265,7 +265,7 @@ Track installation metrics (optional):
 
 Homebrew provides anonymous analytics. View your cask stats:
 ```bash
-brew analytics cask-install --days 30 cliniscribe
+brew analytics cask-install --days 30 cogniscribe
 ```
 
 ## 🔐 Security Best Practices
@@ -285,12 +285,12 @@ brew analytics cask-install --days 30 cliniscribe
 
 ## 🎯 Recommended Approach
 
-**For CliniScribe 1.0.0:**
+**For CogniScribe 1.0.0:**
 
 1. **Start with your own tap** (easiest, full control)
    ```bash
-   brew tap YOUR_USERNAME/cliniscribe
-   brew install --cask cliniscribe
+   brew tap YOUR_USERNAME/cogniscribe
+   brew install --cask cogniscribe
    ```
 
 2. **Get code signing and notarization** (required for wider distribution)
@@ -299,7 +299,7 @@ brew analytics cask-install --days 30 cliniscribe
 
 4. **Submit to official Homebrew** once stable (version 1.1.0+)
    ```bash
-   brew install --cask cliniscribe
+   brew install --cask cogniscribe
    ```
 
 This approach minimizes friction early on while building toward official distribution.
@@ -308,9 +308,9 @@ This approach minimizes friction early on while building toward official distrib
 
 - [ ] Build DMG installer
 - [ ] Calculate SHA256 hash
-- [ ] Update `cliniscribe.rb` with real URL and hash
+- [ ] Update `cogniscribe.rb` with real URL and hash
 - [ ] Test formula locally
-- [ ] Create `homebrew-cliniscribe` repository
+- [ ] Create `homebrew-cogniscribe` repository
 - [ ] Push formula to GitHub
 - [ ] Add installation instructions to main README
 - [ ] (Optional) Apply for code signing certificate

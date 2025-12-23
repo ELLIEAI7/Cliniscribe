@@ -1,5 +1,5 @@
 @echo off
-REM CliniScribe Unified Installer Build Script for Windows
+REM CogniScribe Unified Installer Build Script for Windows
 REM Builds installers with a single command
 
 setlocal enabledelayedexpansion
@@ -12,7 +12,7 @@ set PROJECT_ROOT=%SCRIPT_DIR%..
 echo.
 echo ========================================================
 echo.
-echo          CliniScribe Installer Builder
+echo          CogniScribe Installer Builder
 echo.
 echo ========================================================
 echo.
@@ -47,16 +47,6 @@ if %BUILD_WINDOWS%==1 (
     echo ================================================
     echo.
 
-    REM Check if NSIS is installed
-    where makensis >nul 2>nul
-    if %errorlevel% neq 0 (
-        echo ERROR: NSIS not found. Please install from:
-        echo https://nsis.sourceforge.io/
-        echo.
-        pause
-        exit /b 1
-    )
-
     REM Build Tauri app first
     echo Building Tauri application...
     cd %PROJECT_ROOT%
@@ -67,19 +57,19 @@ if %BUILD_WINDOWS%==1 (
         exit /b 1
     )
 
-    REM Build installer
-    echo.
-    echo Building NSIS installer...
-    cd %SCRIPT_DIR%windows
-    makensis cliniscribe.nsi
-    if %errorlevel% neq 0 (
-        echo ERROR: NSIS build failed
+    REM Copy MSI output
+    set MSI_NAME=CogniScribe_%VERSION%_x64.msi
+    if not exist "%PROJECT_ROOT%\src-tauri\target\release\bundle\msi\%MSI_NAME%" (
+        echo ERROR: MSI not found at src-tauri\target\release\bundle\msi\%MSI_NAME%
         pause
         exit /b 1
     )
 
+    if not exist "%PROJECT_ROOT%\installers\output\windows" mkdir "%PROJECT_ROOT%\installers\output\windows"
+    copy /Y "%PROJECT_ROOT%\src-tauri\target\release\bundle\msi\%MSI_NAME%" "%PROJECT_ROOT%\installers\output\windows\%MSI_NAME%" >nul
+
     echo.
-    echo [OK] Windows installer built successfully!
+    echo [OK] Windows MSI built successfully!
 )
 
 REM Show summary
@@ -90,9 +80,9 @@ echo ================================================
 echo.
 echo Built installers:
 echo.
-if exist "%PROJECT_ROOT%\installers\output\windows\*.exe" (
+if exist "%PROJECT_ROOT%\installers\output\windows\*.msi" (
     echo Windows:
-    dir /b "%PROJECT_ROOT%\installers\output\windows\*.exe"
+    dir /b "%PROJECT_ROOT%\installers\output\windows\*.msi"
 ) else (
     echo   (none)
 )
@@ -100,7 +90,7 @@ echo.
 
 echo Next steps:
 echo   1. Test the installer on a clean Windows system
-echo   2. Generate SHA256: certutil -hashfile installer.exe SHA256
+echo   2. Generate SHA256: certutil -hashfile %MSI_NAME% SHA256
 echo   3. Create GitHub release and upload installer
 echo   4. Update download links on website
 echo.

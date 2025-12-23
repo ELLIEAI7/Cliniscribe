@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "🍎 Building CliniScribe Bundled PKG Installer..."
+echo "🍎 Building CogniScribe Bundled PKG Installer..."
 echo ""
 
 # Colors
@@ -69,7 +69,7 @@ cd "$SCRIPT_DIR"
 
 # Check if build succeeded
 OUTPUT_DIR="$INSTALLERS_DIR/output/macos"
-PKG_FILE="$OUTPUT_DIR/CliniScribe-1.0.0-Installer.pkg"
+PKG_FILE="$OUTPUT_DIR/CogniScribe-1.0.0-Installer.pkg"
 
 if [ ! -f "$PKG_FILE" ]; then
     echo -e "${RED}✗ Error: PKG build failed${NC}"
@@ -77,7 +77,7 @@ if [ ! -f "$PKG_FILE" ]; then
 fi
 
 # Rename to indicate bundled version
-BUNDLED_PKG="$OUTPUT_DIR/CliniScribe-1.0.0-Bundled-Installer.pkg"
+BUNDLED_PKG="$OUTPUT_DIR/CogniScribe-1.0.0-Bundled-Installer.pkg"
 mv "$PKG_FILE" "$BUNDLED_PKG"
 
 # Get sizes
@@ -88,12 +88,12 @@ echo -e "${GREEN}═════════════════════
 echo -e "${GREEN}✓ Bundled PKG Installer created successfully!${NC}"
 echo -e "${GREEN}════════════════════════════════════════════════════════${NC}"
 echo ""
-echo "  📦 File: CliniScribe-1.0.0-Bundled-Installer.pkg"
+echo "  📦 File: CogniScribe-1.0.0-Bundled-Installer.pkg"
 echo "  📊 Size: $PKG_SIZE"
 echo "  📁 Location: $OUTPUT_DIR"
 echo ""
 echo -e "${BLUE}Installer includes:${NC}"
-echo "  ✓ CliniScribe Desktop App"
+echo "  ✓ CogniScribe Desktop App"
 echo "  ✓ Whisper Base Model (~150 MB)"
 echo "  ✓ Whisper Small Model (~500 MB)"
 echo "  ✓ Llama 3.1 8B Model (~4.7 GB)"
@@ -106,7 +106,7 @@ echo "  • Perfect for USB distribution to medical schools"
 echo ""
 echo -e "${BLUE}Next steps:${NC}"
 echo "  1. Test: sudo installer -pkg \"$BUNDLED_PKG\" -target /"
-echo "  2. Verify: Launch CliniScribe and check setup wizard"
+echo "  2. Verify: Launch CogniScribe and check setup wizard"
 echo "  3. Confirm: Setup should skip model download step"
 echo ""
 echo -e "${BLUE}Distribution:${NC}"

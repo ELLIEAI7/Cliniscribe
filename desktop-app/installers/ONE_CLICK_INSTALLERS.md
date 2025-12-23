@@ -1,4 +1,4 @@
-# One-Click Installers for CliniScribe
+# One-Click Installers for CogniScribe
 
 ## Overview
 
@@ -20,55 +20,58 @@ Professional installers for each platform that handle **everything** automatical
 
 **Option 1: PKG Installer** (Recommended)
 ```
-CliniScribe-1.0.0-Installer.pkg
+CogniScribe-1.0.0-Installer.pkg
 ├── Pre-install: Check system requirements
 ├── Install: Copy app to /Applications
 ├── Post-install: Download models (optional)
-└── Launch: Open CliniScribe automatically
+└── Launch: Open CogniScribe automatically
 ```
 
 **Option 2: DMG Disk Image** (Simple)
 ```
-CliniScribe-1.0.0.dmg
-└── Drag CliniScribe.app to Applications
+CogniScribe-1.0.0.dmg
+└── Drag CogniScribe.app to Applications
 ```
 
 **Option 3: Homebrew** (For developers)
 ```bash
-brew install --cask cliniscribe
+brew install --cask cogniscribe
 ```
 
-### Windows (.exe)
+### Windows (.msi)
 
-**NSIS Installer**
+**MSI Installer (Recommended)**
 ```
-CliniScribe-Setup-1.0.0.exe
-├── Welcome screen
-├── License agreement
-├── Install location
-├── Create shortcuts (Desktop + Start Menu)
-├── Install files
-├── Download models (optional)
-├── Create uninstaller
-└── Launch CliniScribe
+CogniScribe_1.0.0_x64.msi
+├── Managed installs via IT tools (Intune/SCCM/GPO)
+├── Silent install support
+├── Add/Remove Programs integration
+└── Launch CogniScribe
+```
+
+**NSIS Installer (Legacy)**
+```
+CogniScribe-Setup-1.0.0.exe
+├── Wizard-style install flow
+└── Launch CogniScribe
 ```
 
 ### Linux (.deb, .rpm, AppImage)
 
 **Option 1: DEB Package** (Ubuntu/Debian)
 ```bash
-sudo dpkg -i cliniscribe_1.0.0_amd64.deb
+sudo dpkg -i cogniscribe_1.0.0_amd64.deb
 ```
 
 **Option 2: RPM Package** (Fedora/RHEL)
 ```bash
-sudo rpm -i cliniscribe-1.0.0.x86_64.rpm
+sudo rpm -i cogniscribe-1.0.0.x86_64.rpm
 ```
 
 **Option 3: AppImage** (Universal)
 ```bash
-chmod +x CliniScribe-1.0.0.AppImage
-./CliniScribe-1.0.0.AppImage
+chmod +x CogniScribe-1.0.0.AppImage
+./CogniScribe-1.0.0.AppImage
 ```
 
 ---
@@ -97,7 +100,7 @@ chmod +x CliniScribe-1.0.0.AppImage
 
 ### Prerequisites
 - macOS: Xcode Command Line Tools
-- Windows: NSIS or Inno Setup
+- Windows: WiX Toolset (MSI)
 - Linux: dpkg-deb, rpmbuild
 
 ### Build All Installers
@@ -111,14 +114,14 @@ This creates:
 ```
 installers/output/
 ├── macos/
-│   ├── CliniScribe-1.0.0.dmg
-│   └── CliniScribe-1.0.0.pkg
+│   ├── CogniScribe-1.0.0.dmg
+│   └── CogniScribe-1.0.0.pkg
 ├── windows/
-│   └── CliniScribe-Setup-1.0.0.exe
+│   └── CogniScribe_1.0.0_x64.msi
 └── linux/
-    ├── cliniscribe_1.0.0_amd64.deb
-    ├── cliniscribe-1.0.0.x86_64.rpm
-    └── CliniScribe-1.0.0.AppImage
+    ├── cogniscribe_1.0.0_amd64.deb
+    ├── cogniscribe-1.0.0.x86_64.rpm
+    └── CogniScribe-1.0.0.AppImage
 ```
 
 ---
@@ -162,7 +165,7 @@ installers/output/
 ### User Experience
 
 **Step 1: Download**
-- User visits cliniscribe.com/download
+- User visits cogniscribe.com/download
 - OS is auto-detected
 - Download button for their platform
 
@@ -170,7 +173,7 @@ installers/output/
 
 *macOS:*
 ```
-1. Open CliniScribe-1.0.0.pkg
+1. Open CogniScribe-1.0.0.pkg
 2. Click "Continue" through welcome
 3. Accept license
 4. Click "Install"
@@ -181,14 +184,17 @@ installers/output/
 
 *Windows:*
 ```
-1. Double-click CliniScribe-Setup-1.0.0.exe
+1. Double-click CogniScribe_1.0.0_x64.msi
 2. Click "Yes" to UAC prompt
-3. Click "Next" through wizard
-4. Choose install location (optional)
-5. Select "Create desktop shortcut" (optional)
-6. Click "Install"
-7. Wait ~1 minute
-8. Click "Finish" (launches app)
+3. Click "Next" through the installer
+4. Click "Install"
+5. Wait ~1 minute
+6. Click "Finish" (launches app)
+```
+
+*Windows (IT Silent Install):*
+```
+msiexec /i CogniScribe_1.0.0_x64.msi /qn /norestart
 ```
 
 *Linux:*
@@ -196,7 +202,7 @@ installers/output/
 1. Open downloaded file
 2. Click "Install" in Software Center
    OR
-1. chmod +x CliniScribe-1.0.0.AppImage
+1. chmod +x CogniScribe-1.0.0.AppImage
 2. Double-click to run
 ```
 
@@ -238,11 +244,11 @@ This creates a larger installer (~5.5 GB) with:
 Edit `installers/config.json`:
 ```json
 {
-  "appName": "CliniScribe",
+  "appName": "CogniScribe",
   "version": "1.0.0",
   "publisher": "Your Organization",
-  "website": "https://cliniscribe.com",
-  "supportEmail": "support@cliniscribe.com",
+  "website": "https://cogniscribe.com",
+  "supportEmail": "support@cogniscribe.com",
   "bundleModels": false,
   "shortcuts": {
     "desktop": true,
@@ -275,18 +281,18 @@ Replace `installers/LICENSE.txt`
 codesign --deep --force --verify --verbose \
   --sign "Developer ID Application: Your Name (TEAM_ID)" \
   --options runtime \
-  CliniScribe.app
+  CogniScribe.app
 ```
 
 **Notarize:**
 ```bash
-xcrun notarytool submit CliniScribe-1.0.0.dmg \
+xcrun notarytool submit CogniScribe-1.0.0.dmg \
   --apple-id "your@email.com" \
   --password "app-specific-password" \
   --team-id "TEAM_ID" \
   --wait
 
-xcrun stapler staple CliniScribe-1.0.0.dmg
+xcrun stapler staple CogniScribe-1.0.0.dmg
 ```
 
 ### Windows
@@ -298,7 +304,7 @@ xcrun stapler staple CliniScribe-1.0.0.dmg
 ```bash
 signtool sign /f certificate.pfx /p password \
   /t http://timestamp.digicert.com \
-  CliniScribe-Setup-1.0.0.exe
+  CogniScribe_1.0.0_x64.msi
 ```
 
 ### Linux
@@ -323,25 +329,25 @@ Host installers on:
 
 **macOS - Homebrew:**
 ```bash
-brew tap yourorg/cliniscribe
-brew install --cask cliniscribe
+brew tap yourorg/cogniscribe
+brew install --cask cogniscribe
 ```
 
 **Windows - Chocolatey:**
 ```bash
-choco install cliniscribe
+choco install cogniscribe
 ```
 
 **Windows - Winget:**
 ```bash
-winget install CliniScribe
+winget install CogniScribe
 ```
 
 **Linux - APT Repository:**
 ```bash
-sudo add-apt-repository ppa:yourorg/cliniscribe
+sudo add-apt-repository ppa:yourorg/cogniscribe
 sudo apt update
-sudo apt install cliniscribe
+sudo apt install cogniscribe
 ```
 
 ---
@@ -385,7 +391,7 @@ npm run test:installer:linux
 
 **Fix:**
 ```bash
-xattr -cr /Applications/CliniScribe.app
+xattr -cr /Applications/CogniScribe.app
 ```
 
 ### "Windows Defender blocked this app" (Windows)
@@ -402,7 +408,7 @@ xattr -cr /Applications/CliniScribe.app
 
 **Fix:**
 ```bash
-chmod +x CliniScribe-1.0.0.AppImage
+chmod +x CogniScribe-1.0.0.AppImage
 ```
 
 ---

@@ -70,14 +70,14 @@ impl OBSConfigWriter {
         Ok(())
     }
 
-    /// Create a basic scene collection for CliniScribe
-    pub fn create_cliniscribe_scene() -> Result<()> {
+    /// Create a basic scene collection for CogniScribe
+    pub fn create_cogniscribe_scene() -> Result<()> {
         let config_dir = Self::get_config_dir()?;
         let scenes_dir = config_dir.join("basic/scenes");
 
         std::fs::create_dir_all(&scenes_dir)?;
 
-        let scene_file = scenes_dir.join("CliniScribe.json");
+        let scene_file = scenes_dir.join("CogniScribe.json");
 
         // Create a simple scene collection with audio input
         let scene_collection = json!({
@@ -88,7 +88,7 @@ impl OBSConfigWriter {
                     "name": "Lecture Recording"
                 }
             ],
-            "name": "CliniScribe",
+            "name": "CogniScribe",
             "sources": [
                 {
                     "versioned_id": "coreaudio_input_capture",
@@ -115,7 +115,7 @@ impl OBSConfigWriter {
             serde_json::to_string_pretty(&scene_collection)?
         )?;
 
-        println!("Created CliniScribe scene collection");
+        println!("Created CogniScribe scene collection");
         Ok(())
     }
 
@@ -129,7 +129,7 @@ impl OBSConfigWriter {
         // This would ideally be done via OBS WebSocket after OBS is running
         // For now, we'll create a filter preset file
         let filter_presets = json!({
-            "cliniscribe_lecture_hall": {
+            "cogniscribe_lecture_hall": {
                 "filters": [
                     {
                         "name": "Noise Suppression",
@@ -163,7 +163,7 @@ impl OBSConfigWriter {
                     }
                 ]
             },
-            "cliniscribe_clinical_skills": {
+            "cogniscribe_clinical_skills": {
                 "filters": [
                     {
                         "name": "Noise Suppression",
@@ -190,11 +190,11 @@ impl OBSConfigWriter {
             }
         });
 
-        let filter_file = config_dir.join("plugin_config/cliniscribe_filters.json");
+        let filter_file = config_dir.join("plugin_config/cogniscribe_filters.json");
         std::fs::create_dir_all(filter_file.parent().unwrap())?;
         std::fs::write(&filter_file, serde_json::to_string_pretty(&filter_presets)?)?;
 
-        println!("Created CliniScribe filter presets");
+        println!("Created CogniScribe filter presets");
         Ok(())
     }
 
@@ -239,13 +239,13 @@ FPSCommon=30
 
     /// Complete OBS configuration setup
     pub fn configure_all() -> Result<()> {
-        println!("Configuring OBS Studio for CliniScribe...");
+        println!("Configuring OBS Studio for CogniScribe...");
 
         // Enable WebSocket
         Self::enable_websocket()?;
 
         // Create scene collection
-        Self::create_cliniscribe_scene()?;
+        Self::create_cogniscribe_scene()?;
 
         // Set up filters
         Self::setup_audio_filters()?;
@@ -304,7 +304,7 @@ mod tests {
 
         let scene_collection = json!({
             "current_scene": "Lecture Recording",
-            "name": "CliniScribe",
+            "name": "CogniScribe",
             "scenes": [{
                 "name": "Lecture Recording",
                 "sources": [{
@@ -317,7 +317,7 @@ mod tests {
         });
 
         assert!(scene_collection["current_scene"] == "Lecture Recording");
-        assert!(scene_collection["name"] == "CliniScribe");
+        assert!(scene_collection["name"] == "CogniScribe");
     }
 
     #[test]
@@ -325,7 +325,7 @@ mod tests {
         use serde_json::json;
 
         let filter_presets = json!({
-            "cliniscribe_lecture_hall": {
+            "cogniscribe_lecture_hall": {
                 "filters": [{
                     "name": "Noise Suppression",
                     "type": "noise_suppress_filter_v2",
@@ -335,7 +335,7 @@ mod tests {
         });
 
         let json_str = serde_json::to_string(&filter_presets).unwrap();
-        assert!(json_str.contains("cliniscribe_lecture_hall"));
+        assert!(json_str.contains("cogniscribe_lecture_hall"));
         assert!(json_str.contains("Noise Suppression"));
     }
 

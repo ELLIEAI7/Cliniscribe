@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "🐧 Building Debian Package for CliniScribe..."
+echo "🐧 Building Debian Package for CogniScribe..."
 
 # Configuration
-APP_NAME="cliniscribe"
+APP_NAME="cogniscribe"
 VERSION="1.0.0"
 ARCH="amd64"
 BUILD_DIR="$(pwd)/src-tauri/target/release"
@@ -44,10 +44,10 @@ Version: $VERSION
 Section: education
 Priority: optional
 Architecture: $ARCH
-Maintainer: CliniScribe Team <support@cliniscribe.com>
+Maintainer: CogniScribe Team <support@cogniscribe.com>
 Depends: libwebkit2gtk-4.0-37, libgtk-3-0
 Description: AI-powered study notes for medical students
- CliniScribe transforms lecture recordings into structured study notes
+ CogniScribe transforms lecture recordings into structured study notes
  using AI-powered transcription and summarization.
  .
  Features:
@@ -55,7 +55,7 @@ Description: AI-powered study notes for medical students
   - AI-generated structured notes
   - Subject-specific summaries
   - 100% offline processing (after initial setup)
-Homepage: https://cliniscribe.com
+Homepage: https://cogniscribe.com
 CONTROL
 echo -e "${GREEN}✓ Created control file${NC}"
 
@@ -65,7 +65,7 @@ cat > "$DEB_DIR/usr/share/applications/$APP_NAME.desktop" << DESKTOP
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=CliniScribe
+Name=CogniScribe
 Comment=AI-powered study notes for medical students
 Exec=/usr/bin/$APP_NAME
 Icon=$APP_NAME
@@ -90,8 +90,8 @@ if command -v gtk-update-icon-cache &> /dev/null; then
     gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
 fi
 
-echo "CliniScribe installed successfully!"
-echo "Launch from your application menu or run 'cliniscribe' in terminal."
+echo "CogniScribe installed successfully!"
+echo "Launch from your application menu or run 'cogniscribe' in terminal."
 
 exit 0
 POSTINST
@@ -104,7 +104,7 @@ cat > "$DEB_DIR/DEBIAN/prerm" << 'PRERM'
 set -e
 
 # Stop any running instances
-pkill -f cliniscribe || true
+pkill -f cogniscribe || true
 
 exit 0
 PRERM
@@ -134,11 +134,11 @@ chmod +x "$DEB_DIR/DEBIAN/postrm"
 # Step 9: Create copyright file
 cat > "$DEB_DIR/usr/share/doc/$APP_NAME/copyright" << 'COPYRIGHT'
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: CliniScribe
-Source: https://cliniscribe.com
+Upstream-Name: CogniScribe
+Source: https://cogniscribe.com
 
 Files: *
-Copyright: 2024 CliniScribe Team
+Copyright: 2024 BagelTech Context
 License: Educational-Use
 
 License: Educational-Use
@@ -151,7 +151,7 @@ COPYRIGHT
 
 # Step 10: Create changelog
 cat > "$DEB_DIR/usr/share/doc/$APP_NAME/changelog" << CHANGELOG
-cliniscribe ($VERSION) stable; urgency=medium
+cogniscribe ($VERSION) stable; urgency=medium
 
   * Initial release
   * Audio transcription with Whisper
@@ -160,7 +160,7 @@ cliniscribe ($VERSION) stable; urgency=medium
   * First-run setup wizard
   * Settings management
 
- -- CliniScribe Team <support@cliniscribe.com>  $(date -R)
+ -- CogniScribe Team <support@cogniscribe.com>  $(date -R)
 CHANGELOG
 
 gzip -9 "$DEB_DIR/usr/share/doc/$APP_NAME/changelog"

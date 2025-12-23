@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-bold text-gray-800 mb-3">CliniScribe</h3>
+            <h3 className="font-bold text-gray-800 mb-3">CogniScribe</h3>
             <p className="text-sm text-gray-600">
               AI-powered study assistant for medical and nursing students.
             </p>
@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-600">
-          <p>© {new Date().getFullYear()} CliniScribe. Made with ❤️ for medical students.</p>
+          <p>© {new Date().getFullYear()} BagelTech Context. Made with ❤️ for medical students.</p>
         </div>
       </div>
     </footer>

@@ -24,6 +24,6 @@ export async function uploadAudio(file, ratio = 0.15, subject = '') {
 }
 
 export async function healthCheck() {
-  const response = await fetch(`${API_BASE_URL}/health`)
+  const response = await fetch(`${API_BASE_URL}/api/health`)
   return await response.json()
 }

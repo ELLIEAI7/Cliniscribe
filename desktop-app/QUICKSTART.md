@@ -1,4 +1,4 @@
-# CliniScribe Desktop - Quick Start Guide
+# CogniScribe Desktop - Quick Start Guide
 
 Get the desktop app running in **10 minutes**! 🚀
 
@@ -85,8 +85,11 @@ npm run bundle:all
 
 **Expected time:** 3-5 minutes
 
+**Requirements:** Python 3.9+ on PATH (`python3.13`, `python3`, or `python`)
+
 **Troubleshooting:**
-- If `bundle:python` fails: Make sure you're in the Cliniscribe root directory
+- If `bundle:python` fails: Make sure you're in the CogniScribe root directory
+- If `bundle:python` fails: Ensure Python 3.9+ is installed (script prefers `python3.13`, falls back to `python3`)
 - If `bundle:ollama` fails: Check your internet connection
 
 ---
@@ -106,7 +109,7 @@ npm run tauri:dev
 **Expected time:** 1-2 minutes for first compilation
 
 **You should see:**
-- A desktop window with the CliniScribe UI
+- A desktop window with the CogniScribe UI
 - Welcome screen if it's your first run
 - Or Dashboard if setup was already completed
 
@@ -165,7 +168,7 @@ When you open the app for the first time:
    - You can minimize and let it run in background
 
 3. **Completion Screen**
-   - Click "Launch CliniScribe"
+   - Click "Launch CogniScribe"
 
 4. **Dashboard** appears
    - You're ready to upload audio!
@@ -220,7 +223,7 @@ desktop-app/
 
 **Check backend bundles exist:**
 ```bash
-ls src-tauri/resources/python-backend/cliniscribe-api
+ls src-tauri/resources/python-backend/cogniscribe-api
 ls src-tauri/resources/ollama/ollama
 ```
 
@@ -262,7 +265,7 @@ npm install
 **Test Python backend separately:**
 ```bash
 cd src-tauri/resources/python-backend
-./cliniscribe-api
+./cogniscribe-api
 
 # Should start on http://localhost:8080
 # Visit http://localhost:8080/docs to test
@@ -314,9 +317,9 @@ npm run tauri:build
 ```
 
 **Outputs:**
-- **macOS**: `src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_x64.dmg`
-- **Windows**: `src-tauri/target/release/bundle/msi/CliniScribe_1.0.0_x64.msi`
-- **Linux**: `src-tauri/target/release/bundle/appimage/CliniScribe_1.0.0_amd64.AppImage`
+- **macOS**: `src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_x64.dmg`
+- **Windows**: `src-tauri/target/release/bundle/msi/CogniScribe_1.0.0_x64.msi`
+- **Linux**: `src-tauri/target/release/bundle/appimage/CogniScribe_1.0.0_amd64.AppImage`
 
 **Expected time:** 5-10 minutes
 

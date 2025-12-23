@@ -107,14 +107,14 @@ Modify `installers/macos/build-pkg.sh`:
 echo -e "${BLUE}Step 3.5: Adding bundled models...${NC}"
 
 # Create models directory in payload
-mkdir -p "$PKG_DIR/payload/Applications/CliniScribe.app/Contents/Resources/models"
+mkdir -p "$PKG_DIR/payload/Applications/CogniScribe.app/Contents/Resources/models"
 
 # Copy bundled models
 if [ -d "$PROJECT_ROOT/installers/bundled-models" ]; then
     cp -R "$PROJECT_ROOT/installers/bundled-models/whisper" \
-          "$PKG_DIR/payload/Applications/CliniScribe.app/Contents/Resources/models/"
+          "$PKG_DIR/payload/Applications/CogniScribe.app/Contents/Resources/models/"
     cp -R "$PROJECT_ROOT/installers/bundled-models/ollama" \
-          "$PKG_DIR/payload/Applications/CliniScribe.app/Contents/Resources/models/"
+          "$PKG_DIR/payload/Applications/CogniScribe.app/Contents/Resources/models/"
     echo -e "${GREEN}✓ Bundled models included${NC}"
 else
     echo -e "${YELLOW}⚠️  Bundled models not found, creating standard installer${NC}"
@@ -128,9 +128,9 @@ cat > "$PKG_DIR/scripts/postinstall" << 'POSTINSTALL'
 #!/bin/bash
 set -e
 
-APP_PATH="/Applications/CliniScribe.app"
+APP_PATH="/Applications/CogniScribe.app"
 USER_HOME=$(eval echo ~$SUDO_USER)
-USER_MODELS_DIR="$USER_HOME/Library/Application Support/com.cliniscribe.app/models"
+USER_MODELS_DIR="$USER_HOME/Library/Application Support/com.bageltech.cogniscribe/models"
 
 # Copy bundled models to user directory
 if [ -d "$APP_PATH/Contents/Resources/models" ]; then
@@ -155,21 +155,21 @@ Create a separate installer for models:
 
 pkgbuild \
     --root "$PROJECT_ROOT/installers/bundled-models" \
-    --identifier "com.cliniscribe.models" \
+    --identifier "com.bageltech.cogniscribe.models" \
     --version "1.0.0" \
-    --install-location "/Library/Application Support/CliniScribe/Models" \
-    "CliniScribe-Models-1.0.0.pkg"
+    --install-location "/Library/Application Support/CogniScribe/Models" \
+    "CogniScribe-Models-1.0.0.pkg"
 ```
 
 Users install both:
 ```bash
-sudo installer -pkg CliniScribe-1.0.0-Installer.pkg -target /
-sudo installer -pkg CliniScribe-Models-1.0.0.pkg -target /
+sudo installer -pkg CogniScribe-1.0.0-Installer.pkg -target /
+sudo installer -pkg CogniScribe-Models-1.0.0.pkg -target /
 ```
 
 ### Windows NSIS with Bundled Models
 
-Modify `installers/windows/cliniscribe.nsi`:
+Modify `installers/windows/cogniscribe.nsi`:
 
 ```nsis
 Section "Main Application" SecMain
@@ -228,13 +228,13 @@ cat > "$DEB_DIR/DEBIAN/postinst" << 'POSTINST'
 set -e
 
 # Copy bundled models to user directory if available
-if [ -d "/usr/share/cliniscribe/models" ]; then
+if [ -d "/usr/share/cogniscribe/models" ]; then
     for user_home in /home/*; do
         user=$(basename "$user_home")
         if [ -d "$user_home" ]; then
-            mkdir -p "$user_home/.config/cliniscribe/models"
-            cp -R /usr/share/cliniscribe/models/* "$user_home/.config/cliniscribe/models/"
-            chown -R "$user:$user" "$user_home/.config/cliniscribe"
+            mkdir -p "$user_home/.config/cogniscribe/models"
+            cp -R /usr/share/cogniscribe/models/* "$user_home/.config/cogniscribe/models/"
+            chown -R "$user:$user" "$user_home/.config/cogniscribe"
         fi
     done
     echo "✓ Bundled models installed (offline ready)"
@@ -251,12 +251,12 @@ POSTINST
 Offer both standard and bundled versions:
 
 **Standard Installer:**
-- `CliniScribe-1.0.0-Setup.exe` (100 MB)
+- `CogniScribe-1.0.0-Setup.exe` (100 MB)
 - Downloads models on first run
 - Recommended for most users
 
 **Bundled Installer:**
-- `CliniScribe-1.0.0-Bundled-Setup.exe` (5.1 GB)
+- `CogniScribe-1.0.0-Bundled-Setup.exe` (5.1 GB)
 - Includes all models
 - For offline/limited internet users
 
@@ -264,21 +264,21 @@ Offer both standard and bundled versions:
 
 Distribute models separately:
 
-1. Main installer: `CliniScribe-1.0.0.exe` (100 MB)
-2. Model pack: `CliniScribe-Models-1.0.0.zip` (5 GB)
+1. Main installer: `CogniScribe-1.0.0.exe` (100 MB)
+2. Model pack: `CogniScribe-Models-1.0.0.zip` (5 GB)
 
 **Installation:**
 ```bash
 # Install app
-sudo dpkg -i CliniScribe-1.0.0.deb
+sudo dpkg -i CogniScribe-1.0.0.deb
 
 # Extract models
-unzip CliniScribe-Models-1.0.0.zip
-cd CliniScribe-Models-1.0.0
+unzip CogniScribe-Models-1.0.0.zip
+cd CogniScribe-Models-1.0.0
 
 # Copy to user directory
-cp -R whisper ~/.config/cliniscribe/models/
-cp -R ollama ~/.config/cliniscribe/models/
+cp -R whisper ~/.config/cogniscribe/models/
+cp -R ollama ~/.config/cogniscribe/models/
 ```
 
 ### Strategy 3: USB Distribution
@@ -287,11 +287,11 @@ For medical schools/bulk deployment:
 
 1. Create USB installer with:
    ```
-   CliniScribe-USB/
+   CogniScribe-USB/
    ├── installers/
-   │   ├── CliniScribe-1.0.0-macOS.pkg
-   │   ├── CliniScribe-1.0.0-Setup.exe
-   │   └── CliniScribe-1.0.0.deb
+   │   ├── CogniScribe-1.0.0-macOS.pkg
+   │   ├── CogniScribe-1.0.0-Setup.exe
+   │   └── CogniScribe-1.0.0.deb
    ├── models/
    │   ├── whisper/
    │   └── ollama/
@@ -310,13 +310,13 @@ For medical schools/bulk deployment:
 **macOS:**
 ```bash
 # 1. Install in VM or clean Mac
-sudo installer -pkg CliniScribe-1.0.0-Bundled.pkg -target /
+sudo installer -pkg CogniScribe-1.0.0-Bundled.pkg -target /
 
 # 2. Disconnect internet
 sudo ifconfig en0 down
 
-# 3. Launch CliniScribe
-open /Applications/CliniScribe.app
+# 3. Launch CogniScribe
+open /Applications/CogniScribe.app
 
 # 4. Verify no download happens
 # Should go straight to main UI
@@ -325,13 +325,13 @@ open /Applications/CliniScribe.app
 **Windows:**
 ```cmd
 REM 1. Install on clean Windows VM
-CliniScribe-1.0.0-Bundled-Setup.exe
+CogniScribe-1.0.0-Bundled-Setup.exe
 
 REM 2. Disconnect internet
 ipconfig /release
 
-REM 3. Launch CliniScribe
-"C:\Program Files\CliniScribe\CliniScribe.exe"
+REM 3. Launch CogniScribe
+"C:\Program Files\CogniScribe\CogniScribe.exe"
 
 REM 4. Verify offline functionality
 ```
@@ -339,13 +339,13 @@ REM 4. Verify offline functionality
 **Linux:**
 ```bash
 # 1. Install on clean Ubuntu
-sudo dpkg -i CliniScribe-1.0.0-bundled.deb
+sudo dpkg -i CogniScribe-1.0.0-bundled.deb
 
 # 2. Disconnect internet
 sudo ip link set enp0s3 down
 
-# 3. Launch CliniScribe
-cliniscribe
+# 3. Launch CogniScribe
+cogniscribe
 
 # 4. Test transcription/summarization
 ```
@@ -356,20 +356,20 @@ Check models are in the correct location:
 
 **macOS:**
 ```bash
-ls -lh ~/Library/Application\ Support/com.cliniscribe.app/models/whisper/
-ls -lh ~/Library/Application\ Support/com.cliniscribe.app/models/ollama/
+ls -lh ~/Library/Application\ Support/com.bageltech.cogniscribe/models/whisper/
+ls -lh ~/Library/Application\ Support/com.bageltech.cogniscribe/models/ollama/
 ```
 
 **Windows:**
 ```cmd
-dir %APPDATA%\cliniscribe\models\whisper
-dir %APPDATA%\cliniscribe\models\ollama
+dir %APPDATA%\cogniscribe\models\whisper
+dir %APPDATA%\cogniscribe\models\ollama
 ```
 
 **Linux:**
 ```bash
-ls -lh ~/.config/cliniscribe/models/whisper/
-ls -lh ~/.config/cliniscribe/models/ollama/
+ls -lh ~/.config/cogniscribe/models/whisper/
+ls -lh ~/.config/cogniscribe/models/ollama/
 ```
 
 ## 📊 Size Comparison

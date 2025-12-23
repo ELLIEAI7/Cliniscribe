@@ -390,7 +390,7 @@ fn main() {
         ])
         .setup(|app| {
             // Perform any initial setup here
-            println!("CliniScribe starting...");
+            println!("CogniScribe starting...");
             Ok(())
         })
         .on_window_event(|event| {

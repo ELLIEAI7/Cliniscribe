@@ -2,7 +2,7 @@
 
 ## Overview
 
-CliniScribe now supports real-time microphone recording with live transcription preview! Users can record lectures directly from their microphone instead of uploading pre-recorded files.
+CogniScribe now supports real-time microphone recording with live transcription preview! Users can record lectures directly from their microphone instead of uploading pre-recorded files.
 
 ## Features Implemented
 
@@ -188,7 +188,7 @@ Dashboard
 
 ### Happy Path
 
-1. **Open CliniScribe**
+1. **Open CogniScribe**
 2. **Navigate to Dashboard**
 3. **Click "Start Recording"** in RecordCard
 4. Browser prompts for microphone access → Allow

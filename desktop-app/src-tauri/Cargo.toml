@@ -1,8 +1,8 @@
 [package]
-name = "cliniscribe-desktop"
+name = "cogniscribe-desktop"
 version = "1.0.0"
-description = "CliniScribe Desktop App"
-authors = ["CliniScribe Team"]
+description = "CogniScribe Desktop App"
+authors = ["CogniScribe Team"]
 license = ""
 repository = ""
 edition = "2021"

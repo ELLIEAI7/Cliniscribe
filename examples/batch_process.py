@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-CliniScribe Batch Processing Script
+CogniScribe Batch Processing Script
 
 Process multiple lecture recordings in one go!
 Great for processing an entire semester of recorded lectures.
@@ -24,7 +24,7 @@ import requests
 from tqdm import tqdm
 
 
-class CliniScribeBatchClient:
+class CogniScribeBatchClient:
     """Client for batch processing multiple audio files."""
     
     def __init__(self, base_url: str = "http://localhost:8080"):
@@ -173,7 +173,7 @@ def print_summary(results: dict):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="CliniScribe Batch Processor - Process multiple lectures at once",
+        description="CogniScribe Batch Processor - Process multiple lectures at once",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -198,7 +198,7 @@ Examples:
     parser.add_argument(
         "--url",
         default="http://localhost:8080",
-        help="CliniScribe API URL (default: http://localhost:8080)"
+        help="CogniScribe API URL (default: http://localhost:8080)"
     )
     
     parser.add_argument(
@@ -253,7 +253,7 @@ Examples:
         sys.exit(0)
     
     # Initialize client and process
-    client = CliniScribeBatchClient(args.url)
+    client = CogniScribeBatchClient(args.url)
     
     print(f"\n🚀 Starting batch processing...")
     start_time = time.time()

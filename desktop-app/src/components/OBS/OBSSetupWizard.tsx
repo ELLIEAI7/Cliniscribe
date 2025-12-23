@@ -107,7 +107,7 @@ function OBSSetupWizard({ onComplete, onSkip }: OBSSetupWizardProps) {
             OBS Studio Not Found
           </h2>
           <p className="text-gray-600 mb-6">
-            CliniScribe Pro requires OBS Studio for professional audio recording.
+            CogniScribe Pro requires OBS Studio for professional audio recording.
           </p>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6 text-left">
@@ -116,7 +116,7 @@ function OBSSetupWizard({ onComplete, onSkip }: OBSSetupWizardProps) {
               <li>1. Visit <a href="https://obsproject.com" target="_blank" rel="noopener noreferrer" className="underline font-semibold">obsproject.com</a></li>
               <li>2. Download OBS Studio (100% Free)</li>
               <li>3. Install and launch OBS</li>
-              <li>4. Come back to CliniScribe and click "Retry"</li>
+              <li>4. Come back to CogniScribe and click "Retry"</li>
             </ol>
           </div>
 
@@ -154,7 +154,7 @@ function OBSSetupWizard({ onComplete, onSkip }: OBSSetupWizardProps) {
             <ol className="space-y-2 text-sm text-yellow-800">
               <li>1. Open OBS Studio from your Applications</li>
               <li>2. Wait for it to fully load</li>
-              <li>3. Come back to CliniScribe and click "Retry"</li>
+              <li>3. Come back to CogniScribe and click "Retry"</li>
             </ol>
           </div>
 
@@ -206,7 +206,7 @@ function OBSSetupWizard({ onComplete, onSkip }: OBSSetupWizardProps) {
             </p>
           </div>
           <p className="text-gray-600">
-            CliniScribe Pro is now ready with professional audio!
+            CogniScribe Pro is now ready with professional audio!
           </p>
         </div>
       )}

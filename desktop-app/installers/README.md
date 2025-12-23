@@ -1,10 +1,10 @@
-# CliniScribe Installer Build Guide
+# CogniScribe Installer Build Guide
 
-This directory contains scripts for building CliniScribe installers for macOS.
+This directory contains scripts for building CogniScribe installers for macOS.
 
 ## Overview
 
-CliniScribe offers two installer types:
+CogniScribe offers two installer types:
 
 1. **Standard Installer** (~600 MB) - Downloads AI models on first run
 2. **Bundled Installer** (~5.4 GB) - Includes pre-downloaded AI models for offline use
@@ -36,7 +36,7 @@ cd desktop-app/installers/macos
 ./build-pkg.sh
 ```
 
-**Output:** `desktop-app/installers/output/macos/CliniScribe-1.0.0-Installer.pkg`
+**Output:** `desktop-app/installers/output/macos/CogniScribe-1.0.0-Installer.pkg`
 
 **Installation size:** ~600 MB
 **First run:** Downloads ~5 GB of AI models (requires internet)
@@ -56,7 +56,7 @@ This script will:
 3. Build the PKG with bundled models
 4. Create a renamed installer indicating it's bundled
 
-**Output:** `desktop-app/installers/output/macos/CliniScribe-1.0.0-Bundled-Installer.pkg`
+**Output:** `desktop-app/installers/output/macos/CogniScribe-1.0.0-Bundled-Installer.pkg`
 
 **Installation size:** ~5.4 GB
 **First run:** No downloads needed - ready to use immediately
@@ -96,7 +96,7 @@ bundled-models/
 Once models are downloaded, the build script automatically:
 
 1. Detects `bundled-models/` directory
-2. Includes models in PKG payload at `/Library/Application Support/CliniScribe/BundledModels`
+2. Includes models in PKG payload at `/Library/Application Support/CogniScribe/BundledModels`
 3. Generates bundled-specific welcome message
 4. Creates postinstall script to copy models to user directories
 
@@ -104,7 +104,7 @@ Once models are downloaded, the build script automatically:
 
 When a user installs the bundled PKG:
 
-1. **App Installation:** CliniScribe.app → `/Applications/`
+1. **App Installation:** CogniScribe.app → `/Applications/`
 2. **Model Installation:** Bundled models → User cache directories
    - Whisper: `~/.cache/huggingface/hub/`
    - Ollama: `~/.ollama/models/`
@@ -113,7 +113,7 @@ When a user installs the bundled PKG:
 
 ### Step 4: First Run Detection
 
-When CliniScribe launches:
+When CogniScribe launches:
 
 1. Checks for `.models-installed` marker file
 2. If found: Skips model download step in setup wizard
@@ -171,30 +171,30 @@ Best for:
 Both build scripts create output in:
 ```
 desktop-app/installers/output/macos/
-├── CliniScribe-1.0.0-Installer.pkg         # Standard (~600 MB)
-└── CliniScribe-1.0.0-Bundled-Installer.pkg # Bundled (~5.4 GB)
+├── CogniScribe-1.0.0-Installer.pkg         # Standard (~600 MB)
+└── CogniScribe-1.0.0-Bundled-Installer.pkg # Bundled (~5.4 GB)
 ```
 
 ## Testing
 
 ### Test Standard Installer
 ```bash
-sudo installer -pkg "output/macos/CliniScribe-1.0.0-Installer.pkg" -target /
-open /Applications/CliniScribe.app
+sudo installer -pkg "output/macos/CogniScribe-1.0.0-Installer.pkg" -target /
+open /Applications/CogniScribe.app
 # Should show setup wizard with model download step
 ```
 
 ### Test Bundled Installer
 ```bash
-sudo installer -pkg "output/macos/CliniScribe-1.0.0-Bundled-Installer.pkg" -target /
-open /Applications/CliniScribe.app
+sudo installer -pkg "output/macos/CogniScribe-1.0.0-Bundled-Installer.pkg" -target /
+open /Applications/CogniScribe.app
 # Should show "Models Pre-Installed!" and skip download
 ```
 
 ### Verify Bundled Models
 ```bash
 # Check marker file
-cat ~/Library/Application\ Support/com.cliniscribe.app/.models-installed
+cat ~/Library/Application\ Support/com.bageltech.cogniscribe/.models-installed
 
 # Check Whisper models
 ls -lh ~/.cache/huggingface/hub/models--Systran--faster-whisper-*/
@@ -212,7 +212,7 @@ ollama list
 **Solutions:**
 1. Check marker file exists:
    ```bash
-   ls ~/Library/Application\ Support/com.cliniscribe.app/.models-installed
+   ls ~/Library/Application\ Support/com.bageltech.cogniscribe/.models-installed
    ```
 
 2. Check model directories:
@@ -271,7 +271,7 @@ Copies models to user cache
          ↓
 Creates .models-installed marker
          ↓
-User launches CliniScribe
+User launches CogniScribe
          ↓
 App checks for marker
          ↓
@@ -311,7 +311,7 @@ export DEVELOPER_ID_INSTALLER="Developer ID Installer: Your Name (TEAM_ID)"
 For App Store / Gatekeeper approval:
 ```bash
 xcrun notarytool submit \
-  "output/macos/CliniScribe-1.0.0-Installer.pkg" \
+  "output/macos/CogniScribe-1.0.0-Installer.pkg" \
   --apple-id "you@example.com" \
   --password "app-specific-password" \
   --team-id "TEAM_ID" \

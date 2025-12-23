@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "🍎 Building macOS PKG Installer for CliniScribe..."
+echo "🍎 Building macOS PKG Installer for CogniScribe..."
 
 # Configuration
-APP_NAME="CliniScribe"
+APP_NAME="CogniScribe"
 VERSION="1.0.0"
-BUNDLE_ID="com.cliniscribe.app"
+BUNDLE_ID="com.bageltech.cogniscribe"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DESKTOP_APP_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 BUILD_DIR="$DESKTOP_APP_DIR/src-tauri/target/release/bundle/macos"
@@ -52,12 +52,12 @@ echo -e "${GREEN}✓ Copied app to PKG payload${NC}"
 echo -e "${BLUE}Step 3.5: Checking for bundled models...${NC}"
 if [ -d "$DESKTOP_APP_DIR/installers/bundled-models" ]; then
     echo "  Found bundled models, including in installer..."
-    mkdir -p "$PKG_DIR/payload/Library/Application Support/CliniScribe/BundledModels"
+    mkdir -p "$PKG_DIR/payload/Library/Application Support/CogniScribe/BundledModels"
     cp -R "$DESKTOP_APP_DIR/installers/bundled-models/"* \
-          "$PKG_DIR/payload/Library/Application Support/CliniScribe/BundledModels/"
+          "$PKG_DIR/payload/Library/Application Support/CogniScribe/BundledModels/"
 
     # Calculate bundled model size
-    MODELS_SIZE=$(du -sh "$PKG_DIR/payload/Library/Application Support/CliniScribe/BundledModels" | cut -f1)
+    MODELS_SIZE=$(du -sh "$PKG_DIR/payload/Library/Application Support/CogniScribe/BundledModels" | cut -f1)
     echo -e "${GREEN}✓ Bundled models included ($MODELS_SIZE)${NC}"
 else
     echo -e "${BLUE}  No bundled models found - creating standard installer${NC}"
@@ -68,12 +68,12 @@ echo -e "${BLUE}Step 3: Creating post-install script...${NC}"
 cat > "$PKG_DIR/scripts/postinstall" << 'POSTINSTALL'
 #!/bin/bash
 
-# Post-installation script for CliniScribe
-APP_PATH="/Applications/CliniScribe.app"
-BUNDLED_DIR="/Library/Application Support/CliniScribe/BundledModels"
+# Post-installation script for CogniScribe
+APP_PATH="/Applications/CogniScribe.app"
+BUNDLED_DIR="/Library/Application Support/CogniScribe/BundledModels"
 USER_HOME=$(eval echo ~$SUDO_USER)
 
-echo "Running CliniScribe post-installation..."
+echo "Running CogniScribe post-installation..."
 
 # Set proper permissions
 chmod -R 755 "$APP_PATH"
@@ -83,8 +83,8 @@ chown -R root:wheel "$APP_PATH"
 xattr -cr "$APP_PATH" 2>/dev/null || true
 
 # Create application support directory
-mkdir -p "$USER_HOME/Library/Application Support/com.cliniscribe.app"
-chown -R $SUDO_USER:staff "$USER_HOME/Library/Application Support/com.cliniscribe.app"
+mkdir -p "$USER_HOME/Library/Application Support/com.bageltech.cogniscribe"
+chown -R $SUDO_USER:staff "$USER_HOME/Library/Application Support/com.bageltech.cogniscribe"
 
 # Install bundled models if available
 if [ -d "$BUNDLED_DIR" ]; then
@@ -112,8 +112,8 @@ if [ -d "$BUNDLED_DIR" ]; then
 
     # Create marker file to indicate bundled models were installed
     echo '{"bundled_models_installed": true, "install_date": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"}' > \
-         "$USER_HOME/Library/Application Support/com.cliniscribe.app/.models-installed"
-    chown $SUDO_USER:staff "$USER_HOME/Library/Application Support/com.cliniscribe.app/.models-installed"
+         "$USER_HOME/Library/Application Support/com.bageltech.cogniscribe/.models-installed"
+    chown $SUDO_USER:staff "$USER_HOME/Library/Application Support/com.bageltech.cogniscribe/.models-installed"
 
     echo "✓ Bundled models installed successfully"
     echo "  Models are ready for offline use!"
@@ -121,8 +121,8 @@ else
     echo "No bundled models found - models will download on first run"
 fi
 
-echo "CliniScribe installation complete!"
-echo "You can find CliniScribe in your Applications folder."
+echo "CogniScribe installation complete!"
+echo "You can find CogniScribe in your Applications folder."
 
 # Optional: Open app automatically
 # open -a "$APP_PATH"
@@ -142,7 +142,7 @@ pkgbuild \
     --version "$VERSION" \
     --scripts "$PKG_DIR/scripts" \
     --install-location "/" \
-    "$PKG_DIR/CliniScribe-component.pkg"
+    "$PKG_DIR/CogniScribe-component.pkg"
 
 echo -e "${GREEN}✓ Built component package${NC}"
 
@@ -151,8 +151,8 @@ echo -e "${BLUE}Step 5: Creating distribution package...${NC}"
 cat > "$PKG_DIR/distribution.xml" << DISTRIBUTION
 <?xml version="1.0" encoding="utf-8"?>
 <installer-gui-script minSpecVersion="2">
-    <title>CliniScribe</title>
-    <organization>com.cliniscribe</organization>
+    <title>CogniScribe</title>
+    <organization>com.bageltech</organization>
     <domains enable_localSystem="true"/>
     <options customize="never" require-scripts="true" rootVolumeOnly="true" />
 
@@ -173,23 +173,23 @@ cat > "$PKG_DIR/distribution.xml" << DISTRIBUTION
 
     <choices-outline>
         <line choice="default">
-            <line choice="com.cliniscribe.app"/>
+            <line choice="com.bageltech.cogniscribe"/>
         </line>
     </choices-outline>
 
     <choice id="default"/>
-    <choice id="com.cliniscribe.app" visible="false">
-        <pkg-ref id="com.cliniscribe.app"/>
+    <choice id="com.bageltech.cogniscribe" visible="false">
+        <pkg-ref id="com.bageltech.cogniscribe"/>
     </choice>
 
-    <pkg-ref id="com.cliniscribe.app" version="$VERSION" onConclusion="none">CliniScribe-component.pkg</pkg-ref>
+    <pkg-ref id="com.bageltech.cogniscribe" version="$VERSION" onConclusion="none">CogniScribe-component.pkg</pkg-ref>
 </installer-gui-script>
 DISTRIBUTION
 
 # Step 7: Create welcome HTML
 if [ -d "$DESKTOP_APP_DIR/installers/bundled-models" ]; then
     # Bundled installer version
-    MODELS_SIZE=$(du -sh "$PKG_DIR/payload/Library/Application Support/CliniScribe/BundledModels" 2>/dev/null | cut -f1 || echo "~5 GB")
+    MODELS_SIZE=$(du -sh "$PKG_DIR/payload/Library/Application Support/CogniScribe/BundledModels" 2>/dev/null | cut -f1 || echo "~5 GB")
     cat > "$PKG_DIR/welcome.html" << WELCOME
 <!DOCTYPE html>
 <html>
@@ -203,9 +203,9 @@ if [ -d "$DESKTOP_APP_DIR/installers/bundled-models" ]; then
     </style>
 </head>
 <body>
-    <h1>Welcome to <span class="highlight">CliniScribe</span> <span class="bundled-badge">BUNDLED</span></h1>
-    <p>This installer will guide you through installing CliniScribe on your Mac.</p>
-    <p><strong>CliniScribe</strong> is an AI-powered tool that transforms lecture recordings into structured study notes for medical and nursing students.</p>
+    <h1>Welcome to <span class="highlight">CogniScribe</span> <span class="bundled-badge">BUNDLED</span></h1>
+    <p>This installer will guide you through installing CogniScribe on your Mac.</p>
+    <p><strong>CogniScribe</strong> is an AI-powered tool that transforms lecture recordings into structured study notes for medical and nursing students.</p>
     <h3>What you'll get:</h3>
     <ul>
         <li>🎙️ High-quality audio transcription</li>
@@ -237,9 +237,9 @@ else
     </style>
 </head>
 <body>
-    <h1>Welcome to <span class="highlight">CliniScribe</span></h1>
-    <p>This installer will guide you through installing CliniScribe on your Mac.</p>
-    <p><strong>CliniScribe</strong> is an AI-powered tool that transforms lecture recordings into structured study notes for medical and nursing students.</p>
+    <h1>Welcome to <span class="highlight">CogniScribe</span></h1>
+    <p>This installer will guide you through installing CogniScribe on your Mac.</p>
+    <p><strong>CogniScribe</strong> is an AI-powered tool that transforms lecture recordings into structured study notes for medical and nursing students.</p>
     <h3>What you'll get:</h3>
     <ul>
         <li>🎙️ High-quality audio transcription</li>
@@ -256,9 +256,9 @@ fi
 
 # Step 8: Create license
 cat > "$PKG_DIR/license.txt" << 'LICENSE'
-CliniScribe License Agreement
+CogniScribe License Agreement
 
-Copyright (c) 2024 CliniScribe
+Copyright (c) 2024 BagelTech Context
 
 Educational Use License
 
@@ -291,18 +291,18 @@ cat > "$PKG_DIR/readme.html" << 'README'
     </ul>
 
     <h2>What happens during installation?</h2>
-    <p>CliniScribe will be installed to your <code>/Applications</code> folder.</p>
+    <p>CogniScribe will be installed to your <code>/Applications</code> folder.</p>
 
     <h2>After installation</h2>
     <ol>
-        <li>Open CliniScribe from your Applications folder or Launchpad</li>
+        <li>Open CogniScribe from your Applications folder or Launchpad</li>
         <li>Complete the first-run setup wizard</li>
         <li>AI models will download automatically (5-15 minutes)</li>
         <li>Start processing your lecture recordings!</li>
     </ol>
 
     <h2>Need help?</h2>
-    <p>Visit <a href="https://cliniscribe.com/docs">cliniscribe.com/docs</a></p>
+    <p>Visit <a href="https://cogniscribe.com/docs">cogniscribe.com/docs</a></p>
 </body>
 </html>
 README
@@ -320,11 +320,11 @@ cat > "$PKG_DIR/conclusion.html" << 'CONCLUSION'
 </head>
 <body>
     <h1>Installation Complete! 🎉</h1>
-    <p>CliniScribe has been successfully installed.</p>
+    <p>CogniScribe has been successfully installed.</p>
 
     <h3>Next steps:</h3>
     <ol>
-        <li>Open <strong>CliniScribe</strong> from your Applications folder</li>
+        <li>Open <strong>CogniScribe</strong> from your Applications folder</li>
         <li>Follow the setup wizard to download AI models</li>
         <li>Start transforming your lectures into study notes!</li>
     </ol>
@@ -373,8 +373,8 @@ echo "  📊 Size: $PKG_SIZE"
 echo ""
 echo "Next steps:"
 echo "  1. Test: sudo installer -pkg \"$OUTPUT_DIR/$APP_NAME-$VERSION-Installer.pkg\" -target /"
-echo "  2. Verify: ls /Applications/CliniScribe.app"
-echo "  3. Launch: open /Applications/CliniScribe.app"
+echo "  2. Verify: ls /Applications/CogniScribe.app"
+echo "  3. Launch: open /Applications/CogniScribe.app"
 echo ""
 echo "For distribution:"
 echo "  - Upload to GitHub Releases"

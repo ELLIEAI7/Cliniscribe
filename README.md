@@ -1,8 +1,8 @@
-# CliniScribe 🎓🎤
+# CogniScribe 🎓🎤
 
 **AI-powered audio transcription and study note generation for medical and nursing students**
 
-CliniScribe helps you transform lecture recordings into structured study notes with transcription, key concepts, clinical terms, and summaries—all powered by state-of-the-art AI models.
+CogniScribe helps you transform lecture recordings into structured study notes with transcription, key concepts, clinical terms, and summaries—all powered by state-of-the-art AI models.
 
 ## ✨ Features
 
@@ -30,8 +30,8 @@ CliniScribe helps you transform lecture recordings into structured study notes w
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/ELLIEAI7/Cliniscribe.git
-cd Cliniscribe
+git clone https://github.com/ELLIEAI7/CogniScribe.git
+cd CogniScribe
 ```
 
 2. **Install Python dependencies**
@@ -92,7 +92,7 @@ print(result["summary"])
 
 ## ⚙️ Configuration
 
-Configure CliniScribe via environment variables:
+Configure CogniScribe via environment variables:
 
 ### Model Settings
 

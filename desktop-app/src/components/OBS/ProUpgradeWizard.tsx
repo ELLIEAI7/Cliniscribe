@@ -121,7 +121,7 @@ function ProUpgradeWizard({ onComplete, onCancel }: ProUpgradeWizardProps) {
         <div className="text-center">
           <div className="text-6xl mb-6">🎚️</div>
           <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            Upgrade to CliniScribe Pro
+            Upgrade to CogniScribe Pro
           </h2>
           <p className="text-lg text-gray-600 mb-8">
             Get professional-quality audio recording with OBS Studio integration
@@ -202,7 +202,7 @@ function ProUpgradeWizard({ onComplete, onCancel }: ProUpgradeWizardProps) {
             Complete Your Purchase
           </h2>
           <p className="text-gray-600 mb-8">
-            Enter your payment information to activate CliniScribe Pro
+            Enter your payment information to activate CogniScribe Pro
           </p>
 
           {/* Payment form will go here - integrate with Stripe/Paddle/etc */}
@@ -289,7 +289,7 @@ function ProUpgradeWizard({ onComplete, onCancel }: ProUpgradeWizardProps) {
             Launching OBS Studio
           </h2>
           <p className="text-gray-600 mb-8">
-            Starting OBS and connecting to CliniScribe...
+            Starting OBS and connecting to CogniScribe...
           </p>
 
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
@@ -301,7 +301,7 @@ function ProUpgradeWizard({ onComplete, onCancel }: ProUpgradeWizardProps) {
         <div className="text-center">
           <div className="text-6xl mb-4">✅</div>
           <h2 className="text-2xl font-bold text-green-700 mb-4">
-            Welcome to CliniScribe Pro!
+            Welcome to CogniScribe Pro!
           </h2>
           <p className="text-lg text-gray-600 mb-8">
             OBS Studio is installed and configured. You're ready to record with professional audio quality!
@@ -311,7 +311,7 @@ function ProUpgradeWizard({ onComplete, onCancel }: ProUpgradeWizardProps) {
             <h3 className="font-semibold text-green-900 mb-3">Next Steps:</h3>
             <ol className="text-left space-y-2 text-sm text-green-800">
               <li>1. OBS Studio is now running in the background</li>
-              <li>2. Select "Pro Recording" mode in CliniScribe</li>
+              <li>2. Select "Pro Recording" mode in CogniScribe</li>
               <li>3. Choose your microphone and audio preset</li>
               <li>4. Start recording with professional quality!</li>
             </ol>
@@ -340,7 +340,7 @@ function ProUpgradeWizard({ onComplete, onCancel }: ProUpgradeWizardProps) {
             <ol className="space-y-2 text-sm text-yellow-800">
               <li>1. Visit <a href="https://obsproject.com" target="_blank" rel="noopener noreferrer" className="underline font-semibold">obsproject.com</a></li>
               <li>2. Download and install OBS Studio manually</li>
-              <li>3. Return to CliniScribe and try connecting again</li>
+              <li>3. Return to CogniScribe and try connecting again</li>
             </ol>
           </div>
 

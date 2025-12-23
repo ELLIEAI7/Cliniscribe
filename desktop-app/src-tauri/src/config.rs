@@ -55,14 +55,14 @@ impl Default for AppConfig {
 pub fn get_config_dir() -> PathBuf {
     dirs::config_dir()
         .expect("Failed to get config directory")
-        .join("cliniscribe")
+        .join("cogniscribe")
 }
 
 /// Get default data directory for storing audio files
 fn get_default_data_dir() -> PathBuf {
     dirs::data_local_dir()
         .expect("Failed to get data directory")
-        .join("cliniscribe")
+        .join("cogniscribe")
         .join("audio_storage")
 }
 
@@ -184,13 +184,13 @@ mod tests {
     #[test]
     fn test_config_dir_creation() {
         let config_dir = get_config_dir();
-        assert!(config_dir.to_string_lossy().contains("cliniscribe"));
+        assert!(config_dir.to_string_lossy().contains("cogniscribe"));
     }
 
     #[test]
     fn test_default_data_dir() {
         let data_dir = get_default_data_dir();
-        assert!(data_dir.to_string_lossy().contains("cliniscribe"));
+        assert!(data_dir.to_string_lossy().contains("cogniscribe"));
         assert!(data_dir.to_string_lossy().contains("audio_storage"));
     }
 }

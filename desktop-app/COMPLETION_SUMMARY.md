@@ -2,7 +2,7 @@
 
 ## Overview
 
-The CliniScribe Desktop Application is **100% code-complete** and ready for testing and deployment!
+The CogniScribe Desktop Application is **100% code-complete** and ready for testing and deployment!
 
 All React components, Rust backend, configuration files, and documentation have been created.
 
@@ -136,7 +136,7 @@ All React components, Rust backend, configuration files, and documentation have 
 **Welcome Screen:**
 ```
 ┌─────────────────────────────────┐
-│       CliniScribe 🎓            │
+│       CogniScribe 🎓            │
 │  AI-Powered Study Notes         │
 │                                 │
 │  🎙️  📝  🔒                     │
@@ -149,7 +149,7 @@ All React components, Rust backend, configuration files, and documentation have 
 **Dashboard:**
 ```
 ┌─────────────────────────────────┐
-│ CliniScribe | Status: ● | ⚙️   │
+│ CogniScribe | Status: ● | ⚙️   │
 ├─────────────────────────────────┤
 │                                 │
 │  🎙️ Click to select audio       │
@@ -378,7 +378,7 @@ cd src-tauri/resources/ollama
 
 # Terminal 2: Start Python API
 cd src-tauri/resources/python-backend
-./cliniscribe-api
+./cogniscribe-api
 
 # Terminal 3: Test API
 curl http://localhost:8080/api/health
@@ -510,6 +510,6 @@ The codebase is:
 
 ---
 
-**You've transformed Cliniscribe from a developer-only tool into something any medical student can use. That's impactful work! 🎓💙**
+**You've transformed CogniScribe from a developer-only tool into something any medical student can use. That's impactful work! 🎓💙**
 
 *Now go test it and get it into the hands of students who need it!* 🚀

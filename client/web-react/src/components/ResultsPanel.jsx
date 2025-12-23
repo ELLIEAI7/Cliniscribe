@@ -54,7 +54,7 @@ export default function ResultsPanel({ data }) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `cliniscribe-notes-${Date.now()}.md`
+    a.download = `cogniscribe-notes-${Date.now()}.md`
     a.click()
     URL.revokeObjectURL(url)
   }

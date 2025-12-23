@@ -1,11 +1,11 @@
-cask "cliniscribe" do
+cask "cogniscribe" do
   version "1.0.0"
   sha256 :no_check  # Update with actual SHA256 after building DMG
 
-  url "https://github.com/YOUR_USERNAME/cliniscribe/releases/download/v#{version}/CliniScribe-#{version}.dmg"
-  name "CliniScribe"
+  url "https://github.com/YOUR_USERNAME/cogniscribe/releases/download/v#{version}/CogniScribe-#{version}.dmg"
+  name "CogniScribe"
   desc "AI-powered study notes for medical students"
-  homepage "https://cliniscribe.com"
+  homepage "https://cogniscribe.com"
 
   livecheck do
     url :url
@@ -15,17 +15,17 @@ cask "cliniscribe" do
   # Minimum macOS version
   depends_on macos: ">= :catalina"
 
-  app "CliniScribe.app"
+  app "CogniScribe.app"
 
   # Post-install message
   postflight do
     puts <<~EOS
       ┌─────────────────────────────────────────────────────────────┐
       │                                                             │
-      │  🎉 CliniScribe has been installed successfully!           │
+      │  🎉 CogniScribe has been installed successfully!           │
       │                                                             │
       │  Next steps:                                               │
-      │    1. Open CliniScribe from your Applications folder       │
+      │    1. Open CogniScribe from your Applications folder       │
       │    2. Complete the first-run setup wizard                  │
       │    3. AI models will download (~5 GB, 5-15 minutes)        │
       │    4. Start transforming lectures into study notes!        │
@@ -36,21 +36,21 @@ cask "cliniscribe" do
       │    • 10 GB free disk space for AI models                   │
       │    • Internet connection for first-time setup              │
       │                                                             │
-      │  Need help? Visit https://cliniscribe.com/docs             │
+      │  Need help? Visit https://cogniscribe.com/docs             │
       │                                                             │
       └─────────────────────────────────────────────────────────────┘
     EOS
   end
 
   # Uninstall script
-  uninstall quit: "com.cliniscribe.app"
+  uninstall quit: "com.bageltech.cogniscribe"
 
   # Optional: Clean up user data (ask first in GUI)
   zap trash: [
-    "~/Library/Application Support/com.cliniscribe.app",
-    "~/Library/Caches/com.cliniscribe.app",
-    "~/Library/Preferences/com.cliniscribe.app.plist",
-    "~/Library/Saved Application State/com.cliniscribe.app.savedState",
-    "~/Library/Logs/CliniScribe",
+    "~/Library/Application Support/com.bageltech.cogniscribe",
+    "~/Library/Caches/com.bageltech.cogniscribe",
+    "~/Library/Preferences/com.bageltech.cogniscribe.plist",
+    "~/Library/Saved Application State/com.bageltech.cogniscribe.savedState",
+    "~/Library/Logs/CogniScribe",
   ]
 end

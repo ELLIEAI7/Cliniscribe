@@ -1,4 +1,4 @@
-# CliniScribe - Super Easy Installation 🎉
+# CogniScribe - Super Easy Installation 🎉
 
 ## One-Time Setup (2 Steps!)
 
@@ -6,17 +6,17 @@
 
 **Download the DMG:**
 ```
-Location: desktop-app/src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_aarch64.dmg
+Location: desktop-app/src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_aarch64.dmg
 ```
 
 **Install:**
-1. Double-click `CliniScribe_1.0.0_aarch64.dmg`
-2. Drag CliniScribe to Applications folder
+1. Double-click `CogniScribe_1.0.0_aarch64.dmg`
+2. Drag CogniScribe to Applications folder
 3. Eject the DMG
 
 ### Step 2: First Launch (Automatic Setup!)
 
-**Launch CliniScribe** from Applications - Setup happens automatically!
+**Launch CogniScribe** from Applications - Setup happens automatically!
 
 The app will:
 1. ✅ Detect this is first run
@@ -77,7 +77,7 @@ The app will:
 
 ---
 
-## Using CliniScribe After Setup
+## Using CogniScribe After Setup
 
 ### Option 1: Upload a Recording
 
@@ -174,22 +174,22 @@ The app will:
 
 ```bash
 # Delete config to trigger first-run again
-rm -rf ~/Library/Application\ Support/cliniscribe
-# Relaunch CliniScribe
+rm -rf ~/Library/Application\ Support/cogniscribe
+# Relaunch CogniScribe
 ```
 
 ### If Models Don't Download
 
 1. **Check Internet:** Ensure stable connection
 2. **Check Space:** Need ~10 GB free
-3. **Check Firewall:** Allow CliniScribe
+3. **Check Firewall:** Allow CogniScribe
 4. **Restart:** Quit and relaunch app
 
 ### If Recording Doesn't Work
 
 1. **Grant Permissions:**
    - System Settings → Privacy & Security → Microphone
-   - Enable for CliniScribe
+   - Enable for CogniScribe
 
 2. **Test Microphone:**
    - Check in System Settings → Sound → Input
@@ -275,7 +275,7 @@ rm -rf ~/Library/Application\ Support/cliniscribe
 - Cached locally
 
 ✅ **Storage:**
-- Config: `~/Library/Application Support/cliniscribe`
+- Config: `~/Library/Application Support/cogniscribe`
 - Models: `~/.cache/huggingface` + `~/.ollama`
 - Audio: Configurable in settings
 
@@ -291,7 +291,7 @@ rm -rf ~/Library/Application\ Support/cliniscribe
 
 After installation:
 
-- [ ] Launch CliniScribe
+- [ ] Launch CogniScribe
 - [ ] Wait for setup wizard (automatic)
 - [ ] See green status indicators in header
 - [ ] Upload a test file OR record yourself
@@ -308,12 +308,12 @@ After installation:
 
 **Application:**
 ```
-/Users/billp/Documents/GitHub/Cliniscribe/desktop-app/src-tauri/target/release/bundle/macos/CliniScribe.app
+/Users/billp/Documents/GitHub/CogniScribe/desktop-app/src-tauri/target/release/bundle/macos/CogniScribe.app
 ```
 
 **DMG Installer:**
 ```
-/Users/billp/Documents/GitHub/Cliniscribe/desktop-app/src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_aarch64.dmg
+/Users/billp/Documents/GitHub/CogniScribe/desktop-app/src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_aarch64.dmg
 ```
 
 **To share:**

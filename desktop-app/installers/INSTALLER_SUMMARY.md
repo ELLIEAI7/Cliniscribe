@@ -1,4 +1,4 @@
-# CliniScribe Installer Summary
+# CogniScribe Installer Summary
 
 Complete one-click installer solution for all platforms.
 
@@ -13,7 +13,7 @@ Complete one-click installer solution for all platforms.
    - Welcome, license, readme, and conclusion screens
    - Post-install scripts for permissions and setup
    - Installs to `/Applications`
-   - Output: `CliniScribe-1.0.0-Installer.pkg` (~50-100 MB)
+   - Output: `CogniScribe-1.0.0-Installer.pkg` (~50-100 MB)
    - **How to build:**
      ```bash
      cd installers/macos
@@ -24,39 +24,40 @@ Complete one-click installer solution for all platforms.
    - Drag-and-drop disk image installer
    - Beautiful UI with app icon and Applications folder link
    - Automatic or manual (hdiutil) creation
-   - Output: `CliniScribe-1.0.0.dmg` (~50-100 MB)
+   - Output: `CogniScribe-1.0.0.dmg` (~50-100 MB)
    - **How to build:**
      ```bash
      cd installers/macos
      ./build-dmg.sh
      ```
 
-3. **Homebrew Cask** (`cliniscribe.rb`)
+3. **Homebrew Cask** (`cogniscribe.rb`)
    - Package manager distribution
-   - One-line installation: `brew install --cask cliniscribe`
+   - One-line installation: `brew install --cask cogniscribe`
    - Automatic updates support
    - See: `HOMEBREW_DISTRIBUTION.md`
    - **How to distribute:**
      ```bash
      # Create your own tap
-     git init homebrew-cliniscribe
-     cp installers/macos/cliniscribe.rb homebrew-cliniscribe/Casks/
+     git init homebrew-cogniscribe
+     cp installers/macos/cogniscribe.rb homebrew-cogniscribe/Casks/
      ```
 
-#### Windows (1 option)
+#### Windows (2 options)
 
-1. **NSIS Installer** (`cliniscribe.nsi` + `build.bat`)
-   - Professional Windows installer with Modern UI
-   - Welcome screen, license agreement, directory selection
-   - Start menu shortcuts, desktop shortcut
+1. **MSI Installer (Recommended)** (WiX via Tauri)
+   - Best for IT-managed deployments and silent installs
    - Add/Remove Programs integration
-   - Uninstaller with optional data removal
-   - Output: `CliniScribe-Setup-1.0.0.exe` (~50-100 MB)
+   - Output: `CogniScribe_1.0.0_x64.msi` (~50-100 MB)
    - **How to build:**
      ```cmd
      cd installers\windows
      build.bat
      ```
+
+2. **NSIS Installer (Legacy)** (`cogniscribe.nsi`)
+   - Wizard-style EXE for ad-hoc installs
+   - Output: `CogniScribe-Setup-1.0.0.exe` (~50-100 MB)
 
 #### Linux (1 option)
 
@@ -65,7 +66,7 @@ Complete one-click installer solution for all platforms.
    - Desktop entry for application menu
    - Post-install/remove scripts
    - Dependency management (webkit2gtk, gtk3)
-   - Output: `cliniscribe_1.0.0_amd64.deb` (~50-100 MB)
+   - Output: `cogniscribe_1.0.0_amd64.deb` (~50-100 MB)
    - **How to build:**
      ```bash
      cd installers/linux
@@ -141,7 +142,7 @@ Complete one-click installer solution for all platforms.
 | macOS | PKG | ~80 MB | 2-3 min | Professional wizard |
 | macOS | DMG | ~80 MB | 1 min | Drag & drop |
 | macOS | Homebrew | Download on demand | 2-3 min | Command line |
-| Windows | NSIS | ~80 MB | 2-3 min | Professional wizard |
+| Windows | MSI | ~80 MB | 1-2 min | Enterprise-friendly |
 | Linux | DEB | ~80 MB | 1-2 min | Standard package manager |
 
 **With Bundled Models:**
@@ -157,24 +158,24 @@ Complete one-click installer solution for all platforms.
 ```bash
 cd installers
 ./build-all.sh --current
-# Output: installers/output/macos/CliniScribe-1.0.0-Installer.pkg
-# Test: sudo installer -pkg output/macos/CliniScribe-1.0.0-Installer.pkg -target /
+# Output: installers/output/macos/CogniScribe-1.0.0-Installer.pkg
+# Test: sudo installer -pkg output/macos/CogniScribe-1.0.0-Installer.pkg -target /
 ```
 
 **Windows:**
 ```cmd
 cd installers
 build-all.bat --current
-REM Output: installers\output\windows\CliniScribe-Setup-1.0.0.exe
-REM Test: Run the .exe as Administrator
+REM Output: installers\output\windows\CogniScribe_1.0.0_x64.msi
+REM Test: msiexec /i CogniScribe_1.0.0_x64.msi /qn /norestart
 ```
 
 **Linux:**
 ```bash
 cd installers
 ./build-all.sh --current
-# Output: installers/output/linux/cliniscribe_1.0.0_amd64.deb
-# Test: sudo dpkg -i output/linux/cliniscribe_1.0.0_amd64.deb
+# Output: installers/output/linux/cogniscribe_1.0.0_amd64.deb
+# Test: sudo dpkg -i output/linux/cogniscribe_1.0.0_amd64.deb
 ```
 
 ### For All Platforms
@@ -187,7 +188,7 @@ cd installers
 # This will:
 # 1. Build macOS PKG and DMG (if on macOS)
 # 2. Build Linux DEB (if on Linux)
-# 3. Prepare Windows NSIS (build on Windows)
+# 3. Prepare Windows MSI (build on Windows)
 ```
 
 ### With Bundled Models
@@ -222,20 +223,18 @@ Before distribution, test each installer:
 - [ ] Verify app launches correctly
 - [ ] Test on macOS 10.15, 11, 12, 13+
 
-### Windows NSIS
+### Windows MSI
 - [ ] Install on clean Windows 10/11
-- [ ] Check Start Menu shortcuts
-- [ ] Check desktop shortcut
 - [ ] Verify Add/Remove Programs entry
-- [ ] Test uninstaller
-- [ ] Confirm user data removal option works
+- [ ] Test silent install: `msiexec /i CogniScribe_1.0.0_x64.msi /qn /norestart`
+- [ ] Test silent uninstall: `msiexec /x CogniScribe_1.0.0_x64.msi /qn /norestart`
 
 ### Linux DEB
 - [ ] Install on Ubuntu 20.04+
 - [ ] Check application menu entry
 - [ ] Verify dependencies install correctly
-- [ ] Test `dpkg -l | grep cliniscribe`
-- [ ] Test uninstall: `sudo apt remove cliniscribe`
+- [ ] Test `dpkg -l | grep cogniscribe`
+- [ ] Test uninstall: `sudo apt remove cogniscribe`
 
 ### Offline Installation
 - [ ] Disconnect from internet
@@ -257,7 +256,7 @@ VERSION="1.0.0"
 
 # Generate checksums
 cd installers/output
-shasum -a 256 **/*.{pkg,dmg,exe,deb} > SHA256SUMS
+shasum -a 256 **/*.{pkg,dmg,msi,deb} > SHA256SUMS
 ```
 
 ### 2. Code Sign (Recommended)
@@ -266,11 +265,11 @@ shasum -a 256 **/*.{pkg,dmg,exe,deb} > SHA256SUMS
 ```bash
 # Sign PKG
 productsign --sign "Developer ID Installer: Your Name" \
-    CliniScribe-1.0.0-Installer.pkg \
-    CliniScribe-1.0.0-Installer-Signed.pkg
+    CogniScribe-1.0.0-Installer.pkg \
+    CogniScribe-1.0.0-Installer-Signed.pkg
 
 # Notarize
-xcrun notarytool submit CliniScribe-1.0.0-Installer-Signed.pkg \
+xcrun notarytool submit CogniScribe-1.0.0-Installer-Signed.pkg \
     --apple-id "your@email.com" \
     --team-id "TEAMID" \
     --wait
@@ -279,7 +278,7 @@ xcrun notarytool submit CliniScribe-1.0.0-Installer-Signed.pkg \
 **Windows:**
 ```cmd
 REM Sign with certificate
-signtool sign /f certificate.pfx /p password /t http://timestamp.digicert.com CliniScribe-Setup-1.0.0.exe
+signtool sign /f certificate.pfx /p password /t http://timestamp.digicert.com CogniScribe_1.0.0_x64.msi
 ```
 
 ### 3. Create GitHub Release
@@ -287,11 +286,11 @@ signtool sign /f certificate.pfx /p password /t http://timestamp.digicert.com Cl
 ```bash
 # Create release
 gh release create v1.0.0 \
-    --title "CliniScribe 1.0.0" \
+    --title "CogniScribe 1.0.0" \
     --notes "First stable release" \
     installers/output/macos/*.pkg \
     installers/output/macos/*.dmg \
-    installers/output/windows/*.exe \
+    installers/output/windows/*.msi \
     installers/output/linux/*.deb \
     installers/output/SHA256SUMS
 ```
@@ -308,22 +307,22 @@ Update your website with:
 
 ```bash
 # Create tap repository
-git clone https://github.com/YOUR_USERNAME/homebrew-cliniscribe
-cd homebrew-cliniscribe
+git clone https://github.com/YOUR_USERNAME/homebrew-cogniscribe
+cd homebrew-cogniscribe
 mkdir -p Casks
 
 # Update formula with real URL and SHA256
-cp ../cliniscribe/installers/macos/cliniscribe.rb Casks/
+cp ../cogniscribe/installers/macos/cogniscribe.rb Casks/
 # Edit to add real download URL and SHA256
 
 # Push to GitHub
-git add Casks/cliniscribe.rb
-git commit -m "Add CliniScribe 1.0.0"
+git add Casks/cogniscribe.rb
+git commit -m "Add CogniScribe 1.0.0"
 git push
 
 # Users can now install with:
-# brew tap YOUR_USERNAME/cliniscribe
-# brew install --cask cliniscribe
+# brew tap YOUR_USERNAME/cogniscribe
+# brew install --cask cogniscribe
 ```
 
 ## 🎯 Next Steps
@@ -380,12 +379,12 @@ installers/
 ├── macos/
 │   ├── build-pkg.sh          # Build macOS PKG installer
 │   ├── build-dmg.sh          # Build macOS DMG installer
-│   ├── cliniscribe.rb        # Homebrew cask formula
+│   ├── cogniscribe.rb        # Homebrew cask formula
 │   └── HOMEBREW_DISTRIBUTION.md
 │
 ├── windows/
 │   ├── build.bat             # Build Windows installer
-│   └── cliniscribe.nsi       # NSIS installer script
+│   └── cogniscribe.nsi       # NSIS installer script
 │
 ├── linux/
 │   └── build-deb.sh          # Build Debian package
@@ -453,7 +452,7 @@ For installer issues:
 
 You now have **complete one-click installers** for:
 - ✅ macOS (PKG + DMG + Homebrew)
-- ✅ Windows (NSIS)
+- ✅ Windows (MSI)
 - ✅ Linux (DEB)
 - ✅ Offline installation (bundled models)
 - ✅ Unified build system

@@ -1,32 +1,32 @@
 @echo off
-echo Building Windows Installer for CliniScribe...
+echo Building Windows MSI for CogniScribe...
 
-REM Build Tauri app first
+set VERSION=1.0.0
+set MSI_NAME=CogniScribe_%VERSION%_x64.msi
+
+REM Build Tauri app (MSI output)
 cd ..\..
 call npm run tauri:build
-
-REM Check if NSIS is installed
-where makensis >nul 2>nul
-if %errorlevel% neq 0 (
-    echo ERROR: NSIS not found. Please install from https://nsis.sourceforge.io/
-    exit /b 1
-)
 
 REM Create output directory
 if not exist "installers\output\windows" mkdir installers\output\windows
 
-REM Build installer with NSIS
-cd installers\windows
-makensis cliniscribe.nsi
+REM Copy MSI to output directory
+if not exist "src-tauri\target\release\bundle\msi\%MSI_NAME%" (
+    echo ERROR: MSI not found at src-tauri\target\release\bundle\msi\%MSI_NAME%
+    exit /b 1
+)
+
+copy /Y "src-tauri\target\release\bundle\msi\%MSI_NAME%" "installers\output\windows\%MSI_NAME%" >nul
 
 echo.
 echo ========================================
 echo Build complete!
 echo ========================================
 echo.
-echo Installer: installers\output\windows\CliniScribe-Setup-1.0.0.exe
+echo Installer: installers\output\windows\%MSI_NAME%
 echo.
-echo To test: Run the installer as Administrator
+echo Silent install: msiexec /i %MSI_NAME% /qn /norestart
 echo.
 
 pause

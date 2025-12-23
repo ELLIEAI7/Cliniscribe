@@ -1,8 +1,8 @@
-# CliniScribe Pro - Payment Integration Guide
+# CogniScribe Pro - Payment Integration Guide
 
 ## Overview
 
-CliniScribe Pro needs a payment system to handle subscriptions for the professional OBS-powered audio recording features. Here are your best options for desktop app monetization:
+CogniScribe Pro needs a payment system to handle subscriptions for the professional OBS-powered audio recording features. Here are your best options for desktop app monetization:
 
 ---
 
@@ -44,7 +44,7 @@ const paddle = await initializePaddle({
 
 // Trigger checkout
 paddle.Checkout.open({
-  items: [{ priceId: 'pri_cliniscribe_pro_monthly', quantity: 1 }],
+  items: [{ priceId: 'pri_cogniscribe_pro_monthly', quantity: 1 }],
 });
 ```
 
@@ -111,7 +111,7 @@ async def create_checkout():
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=[{
-            'price': 'price_cliniscribe_pro',
+            'price': 'price_cogniscribe_pro',
             'quantity': 1,
         }],
         mode='subscription',
@@ -142,7 +142,7 @@ async def create_checkout():
 <script src="https://assets.lemonsqueezy.com/lemon.js"></script>
 
 // Trigger checkout
-window.LemonSqueezy.Url.Open('https://cliniscribe.lemonsqueezy.com/checkout/buy/PRODUCT_ID');
+window.LemonSqueezy.Url.Open('https://cogniscribe.lemonsqueezy.com/checkout/buy/PRODUCT_ID');
 ```
 
 ---
@@ -174,7 +174,7 @@ async fn activate_license(license_key: String) -> Result<bool, String> {
 
 ## Recommended Architecture
 
-### For CliniScribe Pro:
+### For CogniScribe Pro:
 
 **1. Subscription Check on Startup:**
 ```typescript
@@ -236,7 +236,7 @@ async fn activate_pro_subscription(
 ### Phase 1: Payment Provider Setup
 - [ ] Choose payment provider (Paddle recommended)
 - [ ] Sign up and complete account setup
-- [ ] Create product: "CliniScribe Pro"
+- [ ] Create product: "CogniScribe Pro"
 - [ ] Set pricing (e.g., $9.99/month or $99/year)
 - [ ] Get API keys
 

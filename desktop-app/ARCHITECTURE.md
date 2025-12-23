@@ -1,8 +1,8 @@
-# Cliniscribe Desktop App Architecture
+# CogniScribe Desktop App Architecture
 
 ## Overview
 
-A cross-platform desktop application that bundles all Cliniscribe dependencies into a single installer, eliminating the need for manual Python, Ollama, or FFmpeg installation.
+A cross-platform desktop application that bundles all CogniScribe dependencies into a single installer, eliminating the need for manual Python, Ollama, or FFmpeg installation.
 
 ## Technology Stack
 
@@ -18,7 +18,7 @@ A cross-platform desktop application that bundles all Cliniscribe dependencies i
 - **Auto-updater**: Built-in update mechanism
 
 ### Bundled Backend
-- **Python Runtime**: Embedded Python 3.11 (via PyInstaller)
+- **Python Runtime**: Embedded Python (via PyInstaller; version matches build host)
 - **API Server**: FastAPI bundled as standalone executable
 - **Audio Processing**: librosa, noisereduce, pydub (all bundled)
 - **Transcription**: faster-whisper (bundled)
@@ -32,7 +32,7 @@ A cross-platform desktop application that bundles all Cliniscribe dependencies i
 ## Application Structure
 
 ```
-cliniscribe-desktop/
+cogniscribe-desktop/
 ├── src/                          # React frontend
 │   ├── components/
 │   │   ├── SetupWizard/         # First-run setup
@@ -54,7 +54,7 @@ cliniscribe-desktop/
 │   │
 │   ├── resources/               # Bundled at build time
 │   │   ├── python-backend/      # PyInstaller-built backend
-│   │   │   ├── cliniscribe-api  # Executable (platform-specific)
+│   │   │   ├── cogniscribe-api  # Executable (platform-specific)
 │   │   │   └── _internal/       # Dependencies
 │   │   └── ollama/              # Platform-specific Ollama binary
 │   │
@@ -67,9 +67,9 @@ cliniscribe-desktop/
 │   └── build-installer.sh       # Platform-specific installers
 │
 └── installers/                  # Output directory
-    ├── CliniScribe-1.0.0.dmg   # macOS
-    ├── CliniScribe-1.0.0.msi   # Windows
-    └── CliniScribe-1.0.0.AppImage # Linux
+    ├── CogniScribe-1.0.0.dmg   # macOS
+    ├── CogniScribe-1.0.0.msi   # Windows
+    └── CogniScribe-1.0.0.AppImage # Linux
 ```
 
 ## Startup Sequence
@@ -188,7 +188,7 @@ pub struct BackendProcess {
 
 impl BackendProcess {
     pub fn start(app_dir: &Path) -> Result<Self> {
-        let exe_path = app_dir.join("resources/python-backend/cliniscribe-api");
+        let exe_path = app_dir.join("resources/python-backend/cogniscribe-api");
 
         let child = Command::new(exe_path)
             .env("PORT", "8080")
@@ -269,9 +269,9 @@ async fn download_ollama_model(progress_callback: impl Fn(DownloadProgress)) -> 
 ## Configuration Storage
 
 Settings stored in platform-specific locations:
-- **macOS**: `~/Library/Application Support/com.cliniscribe.app/`
-- **Windows**: `%APPDATA%\CliniScribe\`
-- **Linux**: `~/.config/cliniscribe/`
+- **macOS**: `~/Library/Application Support/com.bageltech.cogniscribe/`
+- **Windows**: `%APPDATA%\CogniScribe\`
+- **Linux**: `~/.config/cogniscribe/`
 
 ```rust
 #[derive(Serialize, Deserialize)]
@@ -303,15 +303,15 @@ pub struct AppConfig {
 cd ../
 python -m PyInstaller \
     --onefile \
-    --name cliniscribe-api \
+    --name cogniscribe-api \
     --add-data "src:src" \
     --hidden-import librosa \
     --hidden-import noisereduce \
     --clean \
     src/api/main.py
 
-# Output: dist/cliniscribe-api
-mv dist/cliniscribe-api desktop-app/src-tauri/resources/python-backend/
+# Output: dist/cogniscribe-api
+mv dist/cogniscribe-api desktop-app/src-tauri/resources/python-backend/
 ```
 
 ### 2. Download Ollama
@@ -337,9 +337,9 @@ cd desktop-app
 npm run tauri build
 
 # Outputs:
-# - macOS: src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_x64.dmg
-# - Windows: src-tauri/target/release/bundle/msi/CliniScribe_1.0.0_x64.msi
-# - Linux: src-tauri/target/release/bundle/appimage/CliniScribe_1.0.0_amd64.AppImage
+# - macOS: src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_x64.dmg
+# - Windows: src-tauri/target/release/bundle/msi/CogniScribe_1.0.0_x64.msi
+# - Linux: src-tauri/target/release/bundle/appimage/CogniScribe_1.0.0_amd64.AppImage
 ```
 
 ## Security Considerations

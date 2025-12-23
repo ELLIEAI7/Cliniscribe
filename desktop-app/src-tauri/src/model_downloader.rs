@@ -161,7 +161,7 @@ pub async fn is_model_downloaded(model_name: &str) -> Result<bool> {
 pub fn are_bundled_models_installed() -> Result<bool> {
     let app_support = dirs::data_local_dir()
         .context("Failed to get data directory")?
-        .join("com.cliniscribe.app");
+        .join("com.bageltech.cogniscribe");
 
     let marker_file = app_support.join(".models-installed");
     Ok(marker_file.exists())

@@ -1,5 +1,5 @@
 import { useState, useRef } from "react"
-import { uploadAudio } from "../api/cliniscribe"
+import { uploadAudio } from "../api/cogniscribe"
 import LoadingSpinner from "./LoadingSpinner"
 
 const SUBJECTS = [

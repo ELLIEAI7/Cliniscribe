@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-CliniScribe Python Client Example
+CogniScribe Python Client Example
 
-This script demonstrates how to use the CliniScribe API from Python.
+This script demonstrates how to use the CogniScribe API from Python.
 Perfect for batch processing multiple lecture recordings!
 
 Usage:
@@ -19,8 +19,8 @@ from typing import Optional
 import requests
 
 
-class CliniScribeClient:
-    """Simple client for CliniScribe API."""
+class CogniScribeClient:
+    """Simple client for CogniScribe API."""
     
     def __init__(self, base_url: str = "http://localhost:8080"):
         self.base_url = base_url.rstrip("/")
@@ -94,7 +94,7 @@ def save_results(result: dict, output_dir: Path):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="CliniScribe - Transcribe and summarize medical lectures",
+        description="CogniScribe - Transcribe and summarize medical lectures",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     
@@ -107,7 +107,7 @@ def main():
     parser.add_argument(
         "--url",
         default="http://localhost:8080",
-        help="CliniScribe API URL (default: http://localhost:8080)"
+        help="CogniScribe API URL (default: http://localhost:8080)"
     )
     
     parser.add_argument(
@@ -142,7 +142,7 @@ def main():
         sys.exit(1)
     
     # Initialize client
-    client = CliniScribeClient(args.url)
+    client = CogniScribeClient(args.url)
     
     # Check health
     print(f"Checking API health at {args.url}...")

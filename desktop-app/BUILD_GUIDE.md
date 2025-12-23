@@ -1,8 +1,8 @@
-# CliniScribe Build Guide
+# CogniScribe Build Guide
 
-How to build CliniScribe installers for all platforms.
+How to build CogniScribe installers for all platforms.
 
-## 📋 Quick Answer: Yes, CliniScribe Works on Windows!
+## 📋 Quick Answer: Yes, CogniScribe Works on Windows!
 
 **Built so far:**
 - ✅ macOS (ARM64 Apple Silicon)
@@ -57,8 +57,8 @@ npm install
 npm run tauri build
 
 # Output:
-# - CliniScribe.app → src-tauri/target/release/bundle/macos/
-# - CliniScribe.dmg → src-tauri/target/release/bundle/dmg/
+# - CogniScribe.app → src-tauri/target/release/bundle/macos/
+# - CogniScribe.dmg → src-tauri/target/release/bundle/dmg/
 ```
 
 ### Create Professional PKG Installer
@@ -66,13 +66,13 @@ npm run tauri build
 ```bash
 cd installers/macos
 bash build-pkg.sh
-# Output: installers/output/macos/CliniScribe-1.0.0.pkg
+# Output: installers/output/macos/CogniScribe-1.0.0.pkg
 ```
 
 **Built Successfully:** ✅
-- CliniScribe.app (3.4 MB)
-- CliniScribe_1.0.0_aarch64.dmg (3.1 MB)
-- CliniScribe-1.0.0.pkg (3.1 MB)
+- CogniScribe.app (3.4 MB)
+- CogniScribe_1.0.0_aarch64.dmg (3.1 MB)
+- CogniScribe-1.0.0.pkg (3.1 MB)
 
 ---
 
@@ -92,9 +92,9 @@ Install on your Windows 10/11 PC:
    rustc --version
    ```
 
-3. **NSIS** (for installer): https://nsis.sourceforge.io
+3. **WiX Toolset** (for MSI): https://wixtoolset.org/
    ```cmd
-   makensis /?
+   candle -?
    ```
 
 4. **Visual Studio Build Tools**: https://visualstudio.microsoft.com/downloads/
@@ -104,8 +104,8 @@ Install on your Windows 10/11 PC:
 
 ```cmd
 REM 1. Clone the repository
-git clone https://github.com/yourname/cliniscribe.git
-cd cliniscribe\desktop-app
+git clone https://github.com/yourname/cogniscribe.git
+cd cogniscribe\desktop-app
 
 REM 2. Install dependencies
 npm install
@@ -113,18 +113,16 @@ npm install
 REM 3. Build Tauri app
 npm run tauri build
 
-REM 4. Build NSIS installer
-cd installers\windows
-makensis cliniscribe.nsi
-
-REM Output: installers\output\windows\CliniScribe-Setup-1.0.0.exe
+REM 4. Collect MSI output
+REM Output: src-tauri\target\release\bundle\msi\CogniScribe_1.0.0_x64.msi
+REM Optional: copy to installers\output\windows\
 ```
 
 ### What Gets Built:
 
-- `CliniScribe.exe` - The main application
-- `CliniScribe-Setup-1.0.0.exe` - NSIS installer (recommended for distribution)
-- `CliniScribe.msi` - MSI installer (alternative)
+- `CogniScribe.exe` - The main application
+- `CogniScribe_1.0.0_x64.msi` - MSI installer (recommended for distribution)
+- `CogniScribe-Setup-1.0.0.exe` - NSIS installer (legacy/fallback)
 
 ### Installer Features:
 
@@ -166,8 +164,8 @@ sudo apt-get install -y \
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/yourname/cliniscribe.git
-cd cliniscribe/desktop-app
+git clone https://github.com/yourname/cogniscribe.git
+cd cogniscribe/desktop-app
 npm install
 
 # 2. Build Tauri app
@@ -177,13 +175,13 @@ npm run tauri build
 cd installers/linux
 bash build-deb.sh
 
-# Output: installers/output/linux/cliniscribe_1.0.0_amd64.deb
+# Output: installers/output/linux/cogniscribe_1.0.0_amd64.deb
 ```
 
 ### What Gets Built:
 
-- `cliniscribe` - The binary executable
-- `cliniscribe_1.0.0_amd64.deb` - Debian package
+- `cogniscribe` - The binary executable
+- `cogniscribe_1.0.0_amd64.deb` - Debian package
 - Desktop entry for application menu
 - Proper dependency declarations
 
@@ -236,7 +234,7 @@ Location: `.github/workflows/build-installers.yml`
 | Platform | Build Time | Installer Size | Prerequisites | Difficulty |
 |----------|-----------|----------------|---------------|-----------|
 | **macOS** | ~5 min | 3-4 MB | Xcode tools, Rust | Easy |
-| **Windows** | ~8 min | 4-5 MB | VS Build Tools, NSIS | Medium |
+| **Windows** | ~8 min | 4-5 MB | VS Build Tools, WiX | Medium |
 | **Linux** | ~6 min | 3-4 MB | Many packages | Easy |
 
 ---
@@ -271,41 +269,44 @@ cd installers
 
 ```bash
 # Test the app directly
-open src-tauri/target/release/bundle/macos/CliniScribe.app
+open src-tauri/target/release/bundle/macos/CogniScribe.app
 
 # Test PKG installer
-sudo installer -pkg installers/output/macos/CliniScribe-1.0.0.pkg -target /
-open /Applications/CliniScribe.app
+sudo installer -pkg installers/output/macos/CogniScribe-1.0.0.pkg -target /
+open /Applications/CogniScribe.app
 
 # Test DMG
-open src-tauri/target/release/bundle/dmg/CliniScribe_1.0.0_aarch64.dmg
+open src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_aarch64.dmg
 ```
 
 ### Windows
 
 ```cmd
 REM Test the app directly
-src-tauri\target\release\cliniscribe.exe
+src-tauri\target\release\cogniscribe.exe
 
 REM Test installer
-installers\output\windows\CliniScribe-Setup-1.0.0.exe
+installers\output\windows\CogniScribe_1.0.0_x64.msi
+
+REM Silent install (IT deployment)
+msiexec /i CogniScribe_1.0.0_x64.msi /qn /norestart
 
 REM Verify installation
-"C:\Program Files\CliniScribe\CliniScribe.exe"
+"C:\Program Files\CogniScribe\CogniScribe.exe"
 ```
 
 ### Linux
 
 ```bash
 # Test the app directly
-./src-tauri/target/release/cliniscribe
+./src-tauri/target/release/cogniscribe
 
 # Test DEB package
-sudo dpkg -i installers/output/linux/cliniscribe_1.0.0_amd64.deb
-cliniscribe
+sudo dpkg -i installers/output/linux/cogniscribe_1.0.0_amd64.deb
+cogniscribe
 
 # Verify installation
-dpkg -l | grep cliniscribe
+dpkg -l | grep cogniscribe
 ```
 
 ---
@@ -332,7 +333,7 @@ Before distributing your installers:
 
 - [ ] **Notarize** (macOS only):
   ```bash
-  xcrun notarytool submit CliniScribe-1.0.0.pkg \
+  xcrun notarytool submit CogniScribe-1.0.0.pkg \
     --apple-id "your@email.com" \
     --team-id "TEAMID" \
     --wait
@@ -354,23 +355,22 @@ Before distributing your installers:
 REM 1. Install prerequisites (if not already installed)
 winget install OpenJS.NodeJS
 winget install Rustlang.Rustup
-winget install NSIS.NSIS
+winget install WixToolset.WixToolset
 
 REM 2. Clone and build
-git clone https://github.com/yourname/cliniscribe.git
-cd cliniscribe\desktop-app
+git clone https://github.com/yourname/cogniscribe.git
+cd cogniscribe\desktop-app
 npm install
 npm run tauri build
 
-REM 3. You now have CliniScribe.exe!
-REM Find it at: src-tauri\target\release\cliniscribe.exe
+REM 3. You now have CogniScribe.exe!
+REM Find it at: src-tauri\target\release\cogniscribe.exe
 
-REM 4. (Optional) Build installer
-cd installers\windows
-makensis cliniscribe.nsi
+REM 4. MSI installer output
+REM Find it at: src-tauri\target\release\bundle\msi\CogniScribe_1.0.0_x64.msi
 ```
 
-**Output:** `CliniScribe-Setup-1.0.0.exe` ready for distribution!
+**Output:** `CogniScribe_1.0.0_x64.msi` ready for distribution!
 
 ---
 
@@ -420,10 +420,10 @@ For non-admin installs, provide portable versions (just the .exe or .app).
 → The macOS version you already built works perfectly - Windows version will be very similar!
 
 **Questions?**
-→ Open an issue on GitHub or email support@cliniscribe.com
+→ Open an issue on GitHub or email support@cogniscribe.com
 
 ---
 
-**You now have everything you need to build CliniScribe for all platforms!** 🎉
+**You now have everything you need to build CogniScribe for all platforms!** 🎉
 
 The Windows version will work exactly like the macOS version you just built - same features, same performance, same user experience.

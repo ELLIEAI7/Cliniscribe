@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "CliniScribe",
+    "productName": "CogniScribe",
     "version": "1.0.0"
   },
   "tauri": {
@@ -50,7 +50,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.cliniscribe.app",
+      "identifier": "com.bageltech.cogniscribe",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -63,7 +63,7 @@
         "resources/python-backend/*"
       ],
       "externalBin": [],
-      "copyright": "Copyright © 2024 CliniScribe. Educational use.",
+      "copyright": "Copyright © 2024 BagelTech Context. Educational use.",
       "category": "Education",
       "shortDescription": "AI study notes for medical students",
       "longDescription": "Transform lecture recordings into structured study notes with AI-powered transcription and summarization.",
@@ -88,7 +88,7 @@
     },
     "windows": [
       {
-        "title": "CliniScribe",
+        "title": "CogniScribe",
         "width": 1200,
         "height": 800,
         "minWidth": 800,

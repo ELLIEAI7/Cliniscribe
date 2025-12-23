@@ -105,7 +105,7 @@ function SetupWizard({ onComplete }: SetupWizardProps) {
           <div className="max-w-3xl w-full">
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                🎚️ CliniScribe Pro
+                🎚️ CogniScribe Pro
               </h1>
               <p className="text-lg text-gray-600">
                 Optional: Connect OBS Studio for professional audio recording

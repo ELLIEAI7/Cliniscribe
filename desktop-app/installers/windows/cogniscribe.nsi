@@ -1,4 +1,4 @@
-;CliniScribe NSIS Installer Script
+;CogniScribe NSIS Installer Script
 ;Requires NSIS 3.0 or later
 
 ;--------------------------------
@@ -7,10 +7,10 @@
 
 ;--------------------------------
 ;General
-!define APP_NAME "CliniScribe"
+!define APP_NAME "CogniScribe"
 !define VERSION "1.0.0"
-!define PUBLISHER "CliniScribe"
-!define WEB_SITE "https://cliniscribe.com"
+!define PUBLISHER "CogniScribe"
+!define WEB_SITE "https://cogniscribe.com"
 !define INSTALL_DIR "$PROGRAMFILES64\${APP_NAME}"
 
 Name "${APP_NAME}"

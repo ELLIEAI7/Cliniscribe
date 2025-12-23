@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# CliniScribe Unified Installer Build Script
+# CogniScribe Unified Installer Build Script
 # Builds installers for all platforms from a single command
 
 # Colors
@@ -31,7 +31,7 @@ print_header() {
     echo ""
     echo -e "${CYAN}╔════════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║                                                        ║${NC}"
-    echo -e "${CYAN}║         ${GREEN}CliniScribe Installer Builder${CYAN}                ║${NC}"
+    echo -e "${CYAN}║         ${GREEN}CogniScribe Installer Builder${CYAN}                ║${NC}"
     echo -e "${CYAN}║                                                        ║${NC}"
     echo -e "${CYAN}╚════════════════════════════════════════════════════════╝${NC}"
     echo ""
@@ -95,17 +95,11 @@ build_windows() {
 
     if [ "$CURRENT_PLATFORM" != "windows" ]; then
         echo -e "${YELLOW}⚠️  Note: Building Windows installer from non-Windows platform${NC}"
-        echo -e "${YELLOW}   Ensure NSIS is installed and accessible${NC}"
+        echo -e "${YELLOW}   Build on Windows for MSI output (WiX Toolset required).${NC}"
         echo ""
     fi
 
-    # Check for NSIS
-    if ! command_exists makensis && [ "$CURRENT_PLATFORM" = "windows" ]; then
-        echo -e "${RED}✗ NSIS not found. Install from: https://nsis.sourceforge.io/${NC}"
-        return 1
-    fi
-
-    echo -e "${BLUE}Building NSIS installer...${NC}"
+    echo -e "${BLUE}Building MSI installer...${NC}"
     if [ -f "$SCRIPT_DIR/windows/build.bat" ]; then
         cd "$PROJECT_ROOT"
         if [ "$CURRENT_PLATFORM" = "windows" ]; then
@@ -114,7 +108,7 @@ build_windows() {
             echo -e "${YELLOW}  Skipping Windows build (not on Windows)${NC}"
             echo -e "${YELLOW}  To build on Windows, run: installers\\windows\\build.bat${NC}"
         fi
-        echo -e "${GREEN}✓ Windows installer ready${NC}"
+        echo -e "${GREEN}✓ Windows MSI ready${NC}"
     else
         echo -e "${RED}✗ build.bat not found${NC}"
     fi
