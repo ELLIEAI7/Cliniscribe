@@ -98,14 +98,31 @@ impl ProcessManager {
             anyhow::bail!("Python API binary not found at {:?}", api_path);
         }
 
-        let child = Command::new(&api_path)
+        let resource_base = if resource_dir.join("resources").exists() {
+            resource_dir.join("resources")
+        } else {
+            resource_dir.to_path_buf()
+        };
+
+        let mut command = Command::new(&api_path);
+        command
             .env("PORT", "8080")
             .env("OLLAMA_HOST", "localhost")
             .env("OLLAMA_PORT", "11436")
             .env("WHISPER_MODEL", &config.whisper_model)
             .env("USE_GPU", config.use_gpu.to_string())
             .env("OLLAMA_MODEL", &config.ollama_model)
-            .env("LOG_LEVEL", "INFO")
+            .env("LOG_LEVEL", "INFO");
+
+        if let Some((bin_path, model_path)) = deepfilternet_paths(&resource_base) {
+            command
+                .env("DEEPFILTERNET_ENABLED", "true")
+                .env("DEEPFILTERNET_BIN", bin_path)
+                .env("DEEPFILTERNET_MODEL", model_path)
+                .env("DEEPFILTERNET_USE_POSTFILTER", "true");
+        }
+
+        let child = command
             .spawn()
             .context("Failed to start Python API")?;
 
@@ -199,6 +216,40 @@ impl ProcessManager {
             whisper_loaded: self.api_process.is_some(), // Simplified check
         }
     }
+}
+
+fn deepfilternet_paths(resource_base: &Path) -> Option<(String, String)> {
+    let df_dir = resource_base.join("deepfilternet");
+    if !df_dir.exists() {
+        return None;
+    }
+
+    let bin_name = if cfg!(target_os = "windows") {
+        "deep-filter-0.5.6-x86_64-pc-windows-msvc.exe"
+    } else if cfg!(target_os = "macos") {
+        if cfg!(target_arch = "aarch64") {
+            "deep-filter-0.5.6-aarch64-apple-darwin"
+        } else {
+            "deep-filter-0.5.6-x86_64-apple-darwin"
+        }
+    } else {
+        return None;
+    };
+
+    let bin_path = df_dir.join(bin_name);
+    if !bin_path.exists() {
+        return None;
+    }
+
+    let model_path = df_dir.join("DeepFilterNet3_onnx.tar.gz");
+    if !model_path.exists() {
+        return None;
+    }
+
+    Some((
+        bin_path.to_string_lossy().to_string(),
+        model_path.to_string_lossy().to_string(),
+    ))
 }
 
 impl Drop for ProcessManager {

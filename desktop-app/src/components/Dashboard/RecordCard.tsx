@@ -92,7 +92,7 @@ function RecordCard({ onUploadStart, onResult, onError, isProcessing }: RecordCa
           new URLSearchParams({
             ratio: ratio.toString(),
             ...(subject && { subject }),
-            ...(enhanceAudio ? { enhance: 'true' } : {}),
+            enhance: enhanceAudio ? 'true' : 'false',
           }),
         {
           method: 'POST',

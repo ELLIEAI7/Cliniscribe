@@ -68,7 +68,7 @@ function UploadCard({ onResult, onUploadStart, onError, isProcessing }: UploadCa
       const response = await fetch('http://localhost:8080/api/pipeline?' + new URLSearchParams({
         ratio: ratio.toString(),
         ...(subject && { subject }),
-        ...(enhanceAudio ? { enhance: 'true' } : {}),
+        enhance: enhanceAudio ? 'true' : 'false',
       }), {
         method: 'POST',
         body: await createFilePayload(filePath),
