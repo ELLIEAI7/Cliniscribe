@@ -1,6 +1,9 @@
 use anyhow::{Context, Result};
+use futures::StreamExt;
 use serde::{Deserialize, Serialize};
-use std::path::Path;
+use std::path::{Path, PathBuf};
+use tokio::fs;
+use tokio::io::AsyncWriteExt;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DownloadProgress {
@@ -10,6 +13,186 @@ pub struct DownloadProgress {
     pub downloaded_bytes: u64,
     pub total_bytes: u64,
     pub message: String,
+}
+
+fn resolve_resource_base(resource_dir: &Path) -> PathBuf {
+    if resource_dir.join("resources").exists() {
+        resource_dir.join("resources")
+    } else {
+        resource_dir.to_path_buf()
+    }
+}
+
+fn ollama_binary_name() -> &'static str {
+    if cfg!(target_os = "windows") {
+        "ollama.exe"
+    } else {
+        "ollama"
+    }
+}
+
+fn ollama_resource_path(resource_dir: &Path) -> PathBuf {
+    resolve_resource_base(resource_dir)
+        .join("ollama")
+        .join(ollama_binary_name())
+}
+
+fn ollama_app_dir() -> Result<PathBuf> {
+    let app_support = dirs::data_local_dir()
+        .context("Failed to get data directory")?
+        .join("com.bageltech.cogniscribe");
+    Ok(app_support.join("ollama"))
+}
+
+fn ollama_app_path() -> Result<PathBuf> {
+    Ok(ollama_app_dir()?.join(ollama_binary_name()))
+}
+
+fn ollama_download_url() -> Result<String> {
+    let os = std::env::consts::OS;
+    let arch = match std::env::consts::ARCH {
+        "x86_64" => "amd64",
+        "aarch64" | "arm64" => "arm64",
+        other => {
+            anyhow::bail!("Unsupported architecture: {}", other);
+        }
+    };
+
+    let url = match os {
+        "macos" => "https://github.com/ollama/ollama/releases/latest/download/ollama-darwin"
+            .to_string(),
+        "linux" => format!(
+            "https://github.com/ollama/ollama/releases/latest/download/ollama-linux-{}",
+            arch
+        ),
+        "windows" => format!(
+            "https://github.com/ollama/ollama/releases/latest/download/ollama-windows-{}.exe",
+            arch
+        ),
+        other => {
+            anyhow::bail!("Unsupported platform: {}", other);
+        }
+    };
+
+    Ok(url)
+}
+
+pub fn is_ollama_binary_installed(resource_dir: &Path) -> Result<bool> {
+    if ollama_resource_path(resource_dir).exists() {
+        return Ok(true);
+    }
+
+    Ok(ollama_app_path()?.exists())
+}
+
+pub async fn download_ollama_binary<F>(resource_dir: &Path, progress_callback: F) -> Result<()>
+where
+    F: Fn(DownloadProgress),
+{
+    if ollama_resource_path(resource_dir).exists() {
+        progress_callback(DownloadProgress {
+            model_name: "Ollama Runtime".to_string(),
+            status: "complete".to_string(),
+            percent: 100.0,
+            downloaded_bytes: 0,
+            total_bytes: 0,
+            message: "Ollama runtime already bundled".to_string(),
+        });
+        return Ok(());
+    }
+
+    let app_path = ollama_app_path()?;
+    if app_path.exists() {
+        progress_callback(DownloadProgress {
+            model_name: "Ollama Runtime".to_string(),
+            status: "complete".to_string(),
+            percent: 100.0,
+            downloaded_bytes: 0,
+            total_bytes: 0,
+            message: "Ollama runtime already installed".to_string(),
+        });
+        return Ok(());
+    }
+
+    let url = ollama_download_url()?;
+    let app_dir = ollama_app_dir()?;
+    fs::create_dir_all(&app_dir)
+        .await
+        .context("Failed to create Ollama directory")?;
+
+    progress_callback(DownloadProgress {
+        model_name: "Ollama Runtime".to_string(),
+        status: "downloading".to_string(),
+        percent: 0.0,
+        downloaded_bytes: 0,
+        total_bytes: 0,
+        message: "Downloading Ollama runtime...".to_string(),
+    });
+
+    let client = reqwest::Client::new();
+    let response = client
+        .get(url)
+        .send()
+        .await
+        .context("Failed to download Ollama runtime")?
+        .error_for_status()
+        .context("Ollama runtime download failed")?;
+
+    let total = response.content_length().unwrap_or(0);
+    let mut downloaded: u64 = 0;
+    let mut file = fs::File::create(&app_path)
+        .await
+        .context("Failed to create Ollama binary file")?;
+
+    let mut stream = response.bytes_stream();
+    while let Some(chunk) = stream.next().await {
+        let chunk = chunk.context("Failed to read Ollama download chunk")?;
+        file.write_all(&chunk)
+            .await
+            .context("Failed to write Ollama binary")?;
+        downloaded += chunk.len() as u64;
+
+        let percent = if total > 0 {
+            (downloaded as f64 / total as f64 * 100.0) as f32
+        } else {
+            0.0
+        };
+
+        progress_callback(DownloadProgress {
+            model_name: "Ollama Runtime".to_string(),
+            status: "downloading".to_string(),
+            percent,
+            downloaded_bytes: downloaded,
+            total_bytes: if total > 0 { total } else { downloaded },
+            message: "Downloading Ollama runtime...".to_string(),
+        });
+    }
+
+    file.flush()
+        .await
+        .context("Failed to finalize Ollama binary")?;
+
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        let mut perms = std::fs::metadata(&app_path)
+            .context("Failed to read Ollama binary metadata")?
+            .permissions();
+        perms.set_mode(0o755);
+        std::fs::set_permissions(&app_path, perms)
+            .context("Failed to mark Ollama binary as executable")?;
+    }
+
+    progress_callback(DownloadProgress {
+        model_name: "Ollama Runtime".to_string(),
+        status: "complete".to_string(),
+        percent: 100.0,
+        downloaded_bytes: downloaded,
+        total_bytes: if total > 0 { total } else { downloaded },
+        message: "Ollama runtime ready".to_string(),
+    });
+
+    Ok(())
 }
 
 /// Download Whisper model

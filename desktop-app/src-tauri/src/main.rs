@@ -11,7 +11,14 @@ use tokio::sync::Mutex;
 use tauri::{Manager, State};
 use process_manager::{ProcessManager, ServiceStatus};
 use config::{AppConfig, load_config, save_config};
-use model_downloader::{download_whisper_model, download_ollama_model, DownloadProgress, are_bundled_models_installed};
+use model_downloader::{
+    download_ollama_binary,
+    download_ollama_model,
+    download_whisper_model,
+    is_ollama_binary_installed,
+    are_bundled_models_installed,
+    DownloadProgress,
+};
 use obs::{OBSDetector, OBSManager, OBSInfo, OBSConnectionStatus, OBSAudioSource, OBSRecordingStatus, AudioFilterPreset};
 use audio::NativeRecorderController;
 
@@ -94,6 +101,36 @@ async fn stop_services(state: State<'_, AppState>) -> Result<(), String> {
 async fn get_service_status(state: State<'_, AppState>) -> Result<ServiceStatus, String> {
     let manager = state.process_manager.lock().await;
     Ok(manager.get_status())
+}
+
+/// Check if Ollama runtime is available
+#[tauri::command]
+async fn check_ollama_binary(app_handle: tauri::AppHandle) -> Result<bool, String> {
+    let resource_dir = app_handle
+        .path_resolver()
+        .resource_dir()
+        .ok_or("Failed to get resource directory")?;
+
+    is_ollama_binary_installed(&resource_dir).map_err(|e| e.to_string())
+}
+
+/// Download Ollama runtime if needed
+#[tauri::command]
+async fn ensure_ollama_binary(app_handle: tauri::AppHandle) -> Result<(), String> {
+    let resource_dir = app_handle
+        .path_resolver()
+        .resource_dir()
+        .ok_or("Failed to get resource directory")?;
+
+    let progress_callback = |progress: DownloadProgress| {
+        let _ = app_handle.emit_all("download-progress", progress);
+    };
+
+    download_ollama_binary(&resource_dir, progress_callback)
+        .await
+        .map_err(|e| e.to_string())?;
+
+    Ok(())
 }
 
 /// Download a model with progress tracking
@@ -416,6 +453,8 @@ fn main() {
             start_services,
             stop_services,
             get_service_status,
+            check_ollama_binary,
+            ensure_ollama_binary,
             download_model,
             check_backend_health,
             check_bundled_models,

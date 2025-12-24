@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::{Child, Command};
 use std::time::Duration;
 use tokio::time::sleep;
@@ -23,6 +23,46 @@ pub struct ProcessManager {
     deepfilter_available: bool,
     deepfilter_binary: Option<String>,
     deepfilter_model: Option<String>,
+}
+
+fn ollama_binary_name() -> &'static str {
+    if cfg!(target_os = "windows") {
+        "ollama.exe"
+    } else {
+        "ollama"
+    }
+}
+
+fn resolve_resource_base(resource_dir: &Path) -> PathBuf {
+    if resource_dir.join("resources").exists() {
+        resource_dir.join("resources")
+    } else {
+        resource_dir.to_path_buf()
+    }
+}
+
+fn resolve_ollama_binary(resource_dir: &Path) -> Result<PathBuf> {
+    let resource_path = resolve_resource_base(resource_dir)
+        .join("ollama")
+        .join(ollama_binary_name());
+    if resource_path.exists() {
+        return Ok(resource_path);
+    }
+
+    let app_support = dirs::data_local_dir()
+        .context("Failed to get data directory")?
+        .join("com.bageltech.cogniscribe")
+        .join("ollama");
+    let app_path = app_support.join(ollama_binary_name());
+    if app_path.exists() {
+        return Ok(app_path);
+    }
+
+    anyhow::bail!(
+        "Ollama binary not found at {:?} or {:?}",
+        resource_path,
+        app_path
+    );
 }
 
 impl ProcessManager {
@@ -60,16 +100,7 @@ impl ProcessManager {
     async fn start_ollama(&mut self, resource_dir: &Path) -> Result<()> {
         println!("Starting Ollama...");
 
-        // In production builds, resources are in a nested "resources" directory
-        let ollama_path = if resource_dir.join("resources").exists() {
-            resource_dir.join("resources").join("ollama").join("ollama")
-        } else {
-            resource_dir.join("ollama").join("ollama")
-        };
-
-        if !ollama_path.exists() {
-            anyhow::bail!("Ollama binary not found at {:?}", ollama_path);
-        }
+        let ollama_path = resolve_ollama_binary(resource_dir)?;
 
         let child = Command::new(&ollama_path)
             .arg("serve")

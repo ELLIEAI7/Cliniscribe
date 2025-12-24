@@ -37,4 +37,8 @@ LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
 # API settings
 API_TITLE = "CogniScribe API"
 API_VERSION = "1.0.0"
-API_DESCRIPTION = "Audio transcription and summarization for medical/nursing students"
+API_DESCRIPTION = (
+    "Audio transcription and summarization for medical/nursing students. "
+    "Educational use only. Do not upload live clinical data or PHI. "
+    "Not for diagnosis, treatment, or clinical decision-making."
+)

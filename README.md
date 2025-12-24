@@ -18,11 +18,15 @@ CogniScribe helps you transform lecture recordings into structured study notes w
 - **⚡ Fast Processing**: Optimized pipeline with configurable model sizes
 - **🔌 REST API**: Easy integration with your own applications
 
+## ⚠️ Educational Use Notice
+
+CogniScribe is for educational use only. Do not upload live clinical data or PHI. Not for diagnosis, treatment, or clinical decision-making.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Python 3.9+**
+- **Python 3.11.x** (recommended for prebuilt audio/Whisper dependencies)
 - **Ollama** (for summarization) - [Install Ollama](https://ollama.ai/download)
 - **FFmpeg** (for audio processing)
 
@@ -34,9 +38,11 @@ git clone https://github.com/ELLIEAI7/CogniScribe.git
 cd CogniScribe
 ```
 
-2. **Install Python dependencies**
+2. **Create a virtualenv and install Python dependencies**
 ```bash
-pip install -r requirements.txt
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt -c constraints.txt
 ```
 
 3. **Install and start Ollama**

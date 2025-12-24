@@ -15,7 +15,7 @@ Your CogniScribe desktop app is fully built with **real-time microphone recordin
 desktop-app/src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_aarch64.dmg
 ```
 
-**File Size:** ~600 MB (app only - models download automatically on first run)
+**File Size:** ~600 MB (app only - Ollama runtime + models download automatically on first run)
 
 ---
 
@@ -31,7 +31,7 @@ desktop-app/src-tauri/target/release/bundle/dmg/CogniScribe_1.0.0_aarch64.dmg
 
 1. Open CogniScribe from Applications
 2. **Setup wizard appears automatically**
-3. **Models download automatically** (~5 GB, 5-15 minutes)
+3. **Ollama runtime + models download automatically** (~5 GB, 5-15 minutes)
 4. **Everything configures itself**
 5. **Ready to use!**
 

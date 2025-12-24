@@ -147,6 +147,10 @@ export default function UploadCard({ onResult, onUploadStart, onError, isProcess
         )}
       </div>
 
+      <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800">
+        Educational use only. Do not upload live clinical data or PHI. Not for diagnosis, treatment, or clinical decision-making.
+      </div>
+
       {error && (
         <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           ⚠️ {error}

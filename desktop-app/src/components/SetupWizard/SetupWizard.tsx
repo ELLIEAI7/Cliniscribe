@@ -16,6 +16,7 @@ function SetupWizard({ onComplete }: SetupWizardProps) {
   const [downloadProgress, setDownloadProgress] = useState<any>(null);
   const [downloadError, setDownloadError] = useState<string>('');
   const [bundledModelsInstalled, setBundledModelsInstalled] = useState<boolean>(false);
+  const [ollamaBinaryInstalled, setOllamaBinaryInstalled] = useState<boolean>(false);
 
   // Check for bundled models on mount
   useEffect(() => {
@@ -33,13 +34,24 @@ function SetupWizard({ onComplete }: SetupWizardProps) {
       }
     };
 
+    const checkOllamaBinary = async () => {
+      try {
+        const hasOllamaBinary = await invoke<boolean>('check_ollama_binary');
+        setOllamaBinaryInstalled(hasOllamaBinary);
+      } catch (err) {
+        console.error('Failed to check for Ollama runtime:', err);
+        setOllamaBinaryInstalled(false);
+      }
+    };
+
     checkBundledModels();
+    checkOllamaBinary();
   }, []);
 
   const handleNext = () => {
     if (currentStep === 'welcome') {
-      // Skip download step if bundled models are installed
-      if (bundledModelsInstalled) {
+      // Skip download step if models and runtime are installed
+      if (bundledModelsInstalled && ollamaBinaryInstalled) {
         setCurrentStep('complete');
       } else {
         setCurrentStep('download');
@@ -60,11 +72,15 @@ function SetupWizard({ onComplete }: SetupWizardProps) {
     });
 
     try {
-      // Download Whisper model
-      await invoke('download_model', { modelType: 'whisper' });
+      await invoke('ensure_ollama_binary');
 
-      // Download Llama model
-      await invoke('download_model', { modelType: 'llama' });
+      if (!bundledModelsInstalled) {
+        // Download Whisper model
+        await invoke('download_model', { modelType: 'whisper' });
+
+        // Download Llama model
+        await invoke('download_model', { modelType: 'llama' });
+      }
 
       // Both downloads complete
       setTimeout(() => {
@@ -87,6 +103,7 @@ function SetupWizard({ onComplete }: SetupWizardProps) {
         <WelcomeStep
           onNext={handleNext}
           bundledModelsInstalled={bundledModelsInstalled}
+          ollamaBinaryInstalled={ollamaBinaryInstalled}
         />
       )}
       {currentStep === 'download' && (
