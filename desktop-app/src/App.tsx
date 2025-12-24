@@ -9,6 +9,9 @@ interface ServiceStatus {
   ollama_running: boolean;
   api_running: boolean;
   whisper_loaded: boolean;
+  deepfilter_available: boolean;
+  deepfilter_binary: string | null;
+  deepfilter_model: string | null;
 }
 
 function App() {

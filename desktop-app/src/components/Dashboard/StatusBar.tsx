@@ -4,6 +4,9 @@ interface ServiceStatus {
   ollama_running: boolean;
   api_running: boolean;
   whisper_loaded: boolean;
+  deepfilter_available: boolean;
+  deepfilter_binary: string | null;
+  deepfilter_model: string | null;
 }
 
 interface StatusBarProps {
@@ -24,6 +27,9 @@ function StatusBar({ status, onRefresh }: StatusBarProps) {
   }
 
   const allHealthy = status.ollama_running && status.api_running && status.whisper_loaded;
+  const deepfilterDescription = status.deepfilter_available
+    ? `Model: ${status.deepfilter_model || 'Bundled'}`
+    : 'Studio enhancement unavailable';
 
   return (
     <div className="relative">
@@ -70,6 +76,11 @@ function StatusBar({ status, onRefresh }: StatusBarProps) {
                 label="Whisper Model"
                 status={status.whisper_loaded}
                 description="Transcription engine"
+              />
+              <StatusItem
+                label="DeepFilterNet"
+                status={status.deepfilter_available}
+                description={deepfilterDescription}
               />
             </div>
           </div>

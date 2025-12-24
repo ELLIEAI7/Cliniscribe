@@ -12,11 +12,17 @@ pub struct ServiceStatus {
     pub ollama_running: bool,
     pub api_running: bool,
     pub whisper_loaded: bool,
+    pub deepfilter_available: bool,
+    pub deepfilter_binary: Option<String>,
+    pub deepfilter_model: Option<String>,
 }
 
 pub struct ProcessManager {
     ollama_process: Option<Child>,
     api_process: Option<Child>,
+    deepfilter_available: bool,
+    deepfilter_binary: Option<String>,
+    deepfilter_model: Option<String>,
 }
 
 impl ProcessManager {
@@ -24,6 +30,9 @@ impl ProcessManager {
         Self {
             ollama_process: None,
             api_process: None,
+            deepfilter_available: false,
+            deepfilter_binary: None,
+            deepfilter_model: None,
         }
     }
 
@@ -114,12 +123,28 @@ impl ProcessManager {
             .env("OLLAMA_MODEL", &config.ollama_model)
             .env("LOG_LEVEL", "INFO");
 
-        if let Some((bin_path, model_path)) = deepfilternet_paths(&resource_base) {
+        if let Some(df_paths) = deepfilternet_paths(&resource_base) {
+            let bin_path = df_paths.bin_path.to_string_lossy().to_string();
+            let model_path = df_paths.model_path.to_string_lossy().to_string();
+            self.deepfilter_available = true;
+            self.deepfilter_binary = df_paths
+                .bin_path
+                .file_name()
+                .map(|name| name.to_string_lossy().to_string());
+            self.deepfilter_model = df_paths
+                .model_path
+                .file_name()
+                .map(|name| name.to_string_lossy().to_string());
+
             command
                 .env("DEEPFILTERNET_ENABLED", "true")
                 .env("DEEPFILTERNET_BIN", bin_path)
                 .env("DEEPFILTERNET_MODEL", model_path)
                 .env("DEEPFILTERNET_USE_POSTFILTER", "true");
+        } else {
+            self.deepfilter_available = false;
+            self.deepfilter_binary = None;
+            self.deepfilter_model = None;
         }
 
         let child = command
@@ -214,11 +239,19 @@ impl ProcessManager {
             ollama_running: self.ollama_process.is_some(),
             api_running: self.api_process.is_some(),
             whisper_loaded: self.api_process.is_some(), // Simplified check
+            deepfilter_available: self.deepfilter_available,
+            deepfilter_binary: self.deepfilter_binary.clone(),
+            deepfilter_model: self.deepfilter_model.clone(),
         }
     }
 }
 
-fn deepfilternet_paths(resource_base: &Path) -> Option<(String, String)> {
+struct DeepFilterNetPaths {
+    bin_path: std::path::PathBuf,
+    model_path: std::path::PathBuf,
+}
+
+fn deepfilternet_paths(resource_base: &Path) -> Option<DeepFilterNetPaths> {
     let df_dir = resource_base.join("deepfilternet");
     if !df_dir.exists() {
         return None;
@@ -246,10 +279,7 @@ fn deepfilternet_paths(resource_base: &Path) -> Option<(String, String)> {
         return None;
     }
 
-    Some((
-        bin_path.to_string_lossy().to_string(),
-        model_path.to_string_lossy().to_string(),
-    ))
+    Some(DeepFilterNetPaths { bin_path, model_path })
 }
 
 impl Drop for ProcessManager {
@@ -283,6 +313,7 @@ mod tests {
         assert_eq!(status.ollama_running, false);
         assert_eq!(status.api_running, false);
         assert_eq!(status.whisper_loaded, false);
+        assert_eq!(status.deepfilter_available, false);
     }
 
     #[test]
@@ -291,6 +322,9 @@ mod tests {
             ollama_running: true,
             api_running: true,
             whisper_loaded: true,
+            deepfilter_available: true,
+            deepfilter_binary: Some("deep-filter".to_string()),
+            deepfilter_model: Some("DeepFilterNet3_onnx.tar.gz".to_string()),
         };
 
         let json = serde_json::to_string(&status).unwrap();
@@ -301,5 +335,6 @@ mod tests {
         assert_eq!(deserialized.ollama_running, true);
         assert_eq!(deserialized.api_running, true);
         assert_eq!(deserialized.whisper_loaded, true);
+        assert_eq!(deserialized.deepfilter_available, true);
     }
 }
