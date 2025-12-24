@@ -60,7 +60,8 @@
       ],
       "resources": [
         "resources/ollama/*",
-        "resources/python-backend/*"
+        "resources/python-backend/*",
+        "resources/deepfilternet/*"
       ],
       "externalBin": [],
       "copyright": "Copyright © 2024 BagelTech Context. Educational use.",
